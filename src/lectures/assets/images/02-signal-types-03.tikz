@@ -1,0 +1,21 @@
+% Третья картинка: Квантованный сигнал (вертикальные тонкие, горизонтальные жирные)
+\begin{tikzpicture}[scale=0.8, >=Latex]
+    % Горизонтальные жирные линии
+    \foreach \y in {0,0.5,...,5} {
+        \draw[gray!50, line width=0.7pt] (0,\y) -- (5,\y);
+    }
+    % Вертикальные тонкие линии
+    \foreach \x in {0,0.5,...,5} {
+        \draw[gray!50, very thin] (\x,0) -- (\x,5);
+    }
+
+    \draw[->, thick] (0,2.5) -- (5,2.5) node[right] {Время};
+    \draw[->, thick] (2.5,0) -- (2.5,5) node[above] {Амплитуда};
+
+    % Сигнал (красный, менее яркий)
+    \draw[blue!50, thick, smooth, domain=0:5, samples=100] plot (\x, {2.5 + 1.5*sin(1/3*360*\x/2) + 0.8*sin(360*\x)});
+	% Квантованный сигнал (красный)
+    \draw[red, thick, domain=0:5, samples=500] plot (\x,
+        {2.5 + round(2*(1.45*sin(1/3*360*\x/2) + 0.8*sin(360*\x)))/2});
+    \node at (2.5, -0.5) {Квантованный сигнал};
+\end{tikzpicture}

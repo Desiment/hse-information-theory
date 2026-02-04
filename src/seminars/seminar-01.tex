@@ -1,0 +1,241 @@
+% !TeX root = seminar-01.tex
+% !TeX spellcheck = ru-RU
+% !TeX encoding = UTF-8 Unicode
+% !BIB program = biber
+% LTeX: language=ru-RU
+% LTeX: enablePickyRules=true
+%
+% Copyright (c) 2026 Михаил Михайлов
+%
+% This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+% International License. To view a copy of this license, visit:
+% http://creativecommons.org/licenses/by-nc-sa/4.0/
+%
+% You are free to:
+%   Share - copy and redistribute the material in any medium or format
+%   Adapt - remix, transform, and build upon the material
+%
+% Under the following terms:
+%   Attribution - You must give appropriate credit, provide a link to the license,
+%                 and indicate if changes were made.
+%   NonCommercial - You may not use the material for commercial purposes.
+%   ShareAlike - If you remix, transform, or build upon the material, you must
+%                distribute your contributions under the same license as the original.
+%
+% See the LICENSE file in the repository root for full license text.
+
+\documentclass[seminar, recordsfile={../records.lua}]{practice}
+
+\renewcommand{\SeminarName}{Немного кодирования}
+\renewcommand{\SeminarDate}{16 января 2025}
+
+\xsimsetup{
+	solution/print = true
+}
+\begin{document}
+\subsection*{Лемма Крафта}
+Рассмотрим источник, который генерирует сообщения из алфавита 
+\[
+	\mathcal{A}=\set{a_{1}, a_{2}, \ldots, a_{n}}.
+\]
+Кодер преобразует символы в последовательности кодовых знаков из алфавита 
+\[
+	J = \set{0, 1,\ldots ,q-1}.
+\]
+Код --- это отображение 
+\[
+	f\colon  \mathcal{A} \longrightarrow J^{*},
+\]
+\begin{definition}
+	Код называется \textbf{однозначно декодируемым}, если продолжение $f^*$ кода $f$ на $\mathcal{A}^{*} \to J^{*}$, определяемое правилом:
+	\[
+		f^*(u_1, \ldots, u_n) = f(u_1)\dots f(u_n)
+	\]
+	является инъективным отображением\footnote{Для двух слов $a$ и $b$ запись $ab$ обозначает их конкатенацию}.
+\end{definition}
+Далее под $l(a)$, где $a \in \mathcal{A}^*$ будем понимать длину кодового слова $|f^*(u)|$.
+
+\begin{definition}
+	Код называется \textbf{беспрефиксным}, если ни одно кодовое слово не является началом другого кодового слова, т.е. для любых \(a_1,a_2\in \mathcal{A}\) из условия \(a_2\neq a_2\) следует, что \(f(a_1)\) не является префиксом \(f(a_2)\) и наоборот.
+\end{definition}
+Беспрефиксные коды декодируются мгновенно: при чтении входного потока достаточно сразу определить конец текущего кодового слова без заглядывания вперёд.
+
+\begin{exercise}
+	Приведите пример кода, который однозначно декодируется, но не является беспрефиксным.
+\end{exercise}
+\begin{solution}
+	Возьмём алфавит \(I=\{a,b, c\}\) и зададим код
+	\[
+		f(a)=1,\qquad f(b)=101, \qquad f(c) = 11011.
+	\]
+	Нетрудно проверить что такой код однозначно декодируется.
+\end{solution}
+
+\begin{lemma}[Лемма Крафта]
+	Для алфавита источника $\mathcal{A}$ размера $n$ и алфавита кодировщика $J$ размера $q$, однозначно-декодируемый код $f \colon \mathcal{A} \to J$ с длинами слов $l_1, \ldots, l_n$ существует тогда и только тогда, когда 
+	\[
+		\sum_{i = 1}^{n} 2^{-l_i} \leqslant 1
+	\]
+\end{lemma}
+
+В дальнейшем будем полагать \(q = 2\). Следующие четыре задачи доказывают необходимость условия Крафта.
+
+\begin{exercise}
+	Пусть \(f\colon \mathcal{A}\to J^{*}\) --- произвольный, \(\ell=\max_{a \in \mathcal{A}}l(a)\).
+	Докажите, что для любого \(k\in\mathbb N\)
+	\[
+		\mleft(\sum_{a\in \mathcal{A}}2^{-l(a)}\mright)^{\!k}
+		=
+		\sum_{i=1}^{k\ell} \#\set{u \in \mathcal{A}^k| l(u)=i} \cdot 2^{-i}.
+	\]
+\end{exercise}
+\begin{solution}
+	Распишем левую часть:
+	\[
+		\mleft(\sum_{a\in \mathcal{A}}2^{-l(a)}\mright)^{\!k}
+		=
+		\mleft(\sum_{u_1\in \mathcal{A}}2^{-l(u_1)}\mright)
+			\cdots
+		\mleft(\sum_{u_k \in \mathcal{A}}2^{-l(u_k)}\mright)
+	\]
+	После раскрытия произведения получаем сумму по всем \(k\)-кратным упорядоченным наборам символов
+	\[
+		\sum_{(u_{1}, \dots ,u_{k}) \in \mathcal{A}^{k}} 2^{-l(u_1)} \cdots 2^{-l(u_k)}
+		=
+		\sum_{(u_{1}, \dots ,u_{k}) \in \mathcal{A}^{k}}
+		2^{-\bigl(l(u_1)+\dots +l(u_{k})\bigr)}
+		=
+		\sum_{u \in \mathcal{A}^{k}} 2^{-l(u)}
+	\]
+	Группируя слагаемые по одинаковым значения длины \(i = l(u)\), получаем
+	\[
+		\sum_{u \in \mathcal{A}^{k}} 2^{-l(u)}
+		=
+		\sum_{i=1}^{k\ell}\#\set{u \in \mathcal{A}^k| l(u)=i} \cdot 2^{-i}.
+	\]
+	Что и требовалось доказать.
+\end{solution}
+
+\begin{exercise}
+	Пусть теперь \(f\) --- однозначно‑декодируемый код (необязательно беспрефиксный). Докажите, что для любого \(i\in\mathbb N\) количество слов $u \in \mathcal{A}^*$, таких, что \(l(u) = i\), не превышает \(2^{i}\):
+	\[
+		\#\set{u \in \mathcal{A}^{*} | l(u) = i} \leq 2^{i}.
+	\]
+\end{exercise}
+\begin{solution}
+	Каждое кодовое слово длиной \(i\) является некоторой битовой строкой из множества \(J^{i} = \set{0,1}^{i}\). Поскольку в множестве \(J^{i}\) ровно \(2^{i}\) различных строк, количество различных кодовых слов любой длины не может превышать это число, иначе нарушится инъективность $f^*$.
+\end{solution}
+
+\begin{exercise}
+	Пусть теперь \(f\) --- однозначно‑декодируемый код (необязательно беспрефиксный). Докажите, что для любого \(i\in\mathbb N\) количество слов $u \in \mathcal{A}^*$, таких, что \(l(u) = i\), не превышает \(2^{i}\):
+	\[
+		\mleft(\sum_{a\in \mathcal{A}}2^{-l(a)}\mright)^{\!k} \leq kl
+	\]
+\end{exercise}
+\begin{solution}
+	По предыдущим упражнениям:
+	\[
+		\mleft(\sum_{a\in \mathcal{A}}2^{-l(a)}\mright)^{\!k}
+		=
+		\sum_{i=1}^{k\ell} \underbrace{\#\set{u \in \mathcal{A}^k| l(u)=i}}_{\leq 2^i} \cdot 2^{-i}
+		\leq
+		\sum_{i=1}^{k\ell} 2^i \cdot 2^{-i}
+		=
+		k\ell
+	\]
+\end{solution}
+
+
+\begin{exercise}
+	Пусть \(f\) --- однозначно‑декодируемый код. Докажите, что
+	\[
+		\sum_{a \in \mathcal{A}} 2^{-l(a)} \leq 1.
+	\]
+\end{exercise}
+\begin{solution}
+	Возьмём произвольное \(k\in\mathbb N\) и применим предыдущее упражнение:
+	\[
+		\mleft(\sum_{a\in \mathcal{A}}2^{-l(a)}\mright)^{\!k} \leq k\ell
+	\]
+	Отсюда
+	\[
+		\sum_{a \in \mathcal{A}}2^{-l(a)} \leq (k\ell)^{1/k}.
+	\]
+	Поскольку \(\ell\) фиксировано, предел правой части при \(k\to\infty\) равен \(1\):
+	\[
+		\lim_{k\to\infty}(k\ell)^{1/k} = 1.
+	\]
+	Следовательно,
+	\[
+		\sum_{a \in \mathcal{A}}2^{-l(a)} \leq 1.
+	\]
+\end{solution}
+
+\subsection*{Средняя длина и энтропия}
+Будем теперь считать, что источник генерирует символ \(a_{i}\) с вероятностью \(p_{i}\), (все \(p_{i} > 0, \sum p_{i}=1\)).
+\begin{definition}
+	\textbf{Средняя длина} кода $f$ с длинами \(l_{i}=l(a_{i})\) определяется как
+	\[
+		L(C^f) = \sum_{i=1}^{n}p_{i}l_{i}.
+	\]
+\end{definition}
+\begin{theorem}[Теорема Шенонна]
+	Пусть $f$ --- однозначно-декодируемый код, имеющий наименьшую среднюю длину среди всех однозначно-декодируемых кодов. Тогда
+	\[
+		\mathrm{H}_{2}(p_{1},\dots ,p_{n}) \leq L(C^f) \leq \mathrm{H}_{2}(p_{1},\dots ,p_{n}) + 1
+	\]
+\end{theorem}
+
+\begin{exercise}
+	Докажите, что для любого однозначно‑декодируемого кода выполняется неравенство:
+	\[
+		L(C^f) \geq \mathrm{H}_{2}(p_{1},\dots ,p_n),
+	\]
+\end{exercise}
+\begin{solution}
+	Чтобы оценить нижнее значение, найдем минимум функции $L(C^f)$. Рассмотрим задачу минимизации средней длины при фиксированных вероятностях \(p_{i}\) и выполнении условия Крафта
+	\begin{align*}
+		&\sum_{i = 1}^{n} p_i l_i \to \min \\
+		&\sum_{i = 1}^{n}2^{-l_{i}} \leq 1, \qquad l_{i} \in \N.
+	\end{align*}
+	Два замечания:
+	\begin{itemize}[compact]
+		\item Условие целочисленности $l_i$ можно ослабить --- это только ухудшит оценку минимума.
+		\item Точка минимума находится на границе множества \(\sum_{i = 1}^{n}2^{-l_{i}} \leq 1\), т.е. когда 
+		\[
+			\sum_{i = 1}^{n}2^{-l_{i}} = 1.
+		\]
+		Поскольку, если бы точка минимума находилась внутри, то можно было бы уменьшить одно из $l_i$ на достаточно малое число --- это привело бы к тому что неравенство Крафта все еще сохранялось, но средняя длина уменьшилась. 
+	\end{itemize}
+	Итак, свелись к следующей задаче:
+	\begin{align*}
+		&\sum_{i = 1}^{n} p_i l_i \to \min \\
+		&\sum_{i = 1}^{n}2^{-l_{i}} = 1, \qquad l_{i} \in \R.
+	\end{align*}
+	Запишем функцию Лагранжа:
+	\[
+		\mathcal{L}(l_{1},\dots ,l_{n},\lambda) = \sum_{i = 1}^{n}p_{i}l_{i}
+		+ \lambda \cdot \left(\sum_{i = 1}^{n}2^{-l_{i}}-1\right).
+	\]
+	Найдём стационарные точки, дифференцируя по \(l_{i}\):
+	\[
+		\pd{\mathcal{L}}{l_i} = p_{i} - \lambda \cdot 2^{-l_{i}} \cdot \ln 2 = 0
+		\Longrightarrow
+		2^{-l_{i}} = \frac{p_{i}}{\lambda\ln 2}.
+	\]
+	Подставляя в условие Крафта:
+	\[
+		\sum_{i = 1}^{n} \frac{p_{i}}{\lambda\ln 2} = 1
+		\Longrightarrow
+		\lambda=\frac{1}{\ln 2}.
+	\]
+	Отсюда
+	\[
+		2^{-l_{i}} = p_{i}\quad\Longrightarrow\quad l_{i} = -\log_{2}p_{i}.
+	\]
+	Подставляя найденные \(l_{i}\) в целевую функцию, получаем
+	\[
+		L(C^f) \geq \mathrm{H}_{2}(p_{1}, \ldots , p_{n})
+	\]
+\end{solution}
+\end{document}

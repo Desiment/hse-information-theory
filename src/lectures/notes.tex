@@ -1,0 +1,49 @@
+% !TeX root = notes.tex
+% !TeX spellcheck = ru-RU
+% !TeX encoding = UTF-8 Unicode
+% !BIB program = biber
+% LTeX: language=ru-RU
+% LTeX: enablePickyRules=true
+% Copyright (c) 2026 Михаил Михайлов
+%
+% This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+% International License. To view a copy of this license, visit:
+% http://creativecommons.org/licenses/by-nc-sa/4.0/
+%
+% You are free to:
+%   Share - copy and redistribute the material in any medium or format
+%   Adapt - remix, transform, and build upon the material
+%
+% Under the following terms:
+%   Attribution - You must give appropriate credit, provide a link to the license,
+%                 and indicate if changes were made.
+%   NonCommercial - You may not use the material for commercial purposes.
+%   ShareAlike - If you remix, transform, or build upon the material, you must
+%                distribute your contributions under the same license as the original.
+%
+% See the LICENSE file in the repository root for full license text.
+
+\documentclass{lecturenotes}
+\input{preamble.tex}
+
+
+\title{Теория информации}
+\author{Михаил Михайлов}
+\date{2026}
+
+\begin{document}
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+
+\setlength{\epigraphwidth}{0.75\linewidth}
+\renewcommand{\textflush}{flushepinormal}
+\chapter{Введение в теорию информации}
+\epigraph{Меня больше всего беспокоило, как это назвать. Я думал назвать это \enquote{информацией}, но это слово использовалось слишком часто, поэтому я решил назвать это \enquote{неопределённостью}. Когда я обсуждал это с Джоном фон Нейманом, у него возникла идея получше. Фон Нейман сказал мне: \enquote{Вам следует называть это энтропией по двум причинам. Во-первых, ваша функция неопределенности использовалась в статистической механике под этим именем, поэтому у неё уже есть имя. Во-вторых, что более важно, никто на самом деле не знает, что такое энтропия, поэтому в дебатах у вас всегда будет преимущество}}{Клод Шеннон, \enquote{отец} теории информации.}
+
+\localtableofcontents
+\include{chapters/chapter-01-info-theory/01-intro.tex}
+\include{chapters/chapter-01-info-theory/02-entropy.tex}
+%\include{chapters/chapter-01-info-theory/03-mutual-information.tex}
+\end{document}

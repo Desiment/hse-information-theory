@@ -1,0 +1,30 @@
+\begin{tikzpicture}[
+	node distance=2cm,
+	>=Stealth,
+	box/.style={draw, rectangle, minimum width=2cm, minimum height=1.2cm, align=center},
+	noise/.style={draw, ellipse, minimum width=1.5cm, minimum height=1cm},
+	label/.style={midway, above, sloped, font=\small}
+]
+	% Узлы
+	\node[box] (source) {Источник\\сообщения};
+	\node[box, right=of source] (transmitter) {Передатчик\\(Кодировщик)};
+	\node[noise, right=of transmitter] (channel) {Канал связи};
+	\node[box, right=of channel] (receiver) {Приёмник\\(Декодировщик)};
+	\node[box, right=of receiver] (destination) {Получатель\\сообщения};
+
+	% Стрелки с метками
+	\draw[->, thick] (source) -- (transmitter) 
+		node[label] {Сообщение};
+		
+	\draw[->, thick] (transmitter) -- (channel)
+		node[label] {Сигнал};
+
+	\draw[->, thick, dashed] (channel) -- (receiver)
+		node[label, above] {\parbox{1.5cm}{\centering Принятый\\сигнал}};
+
+	\draw[->, thick] (receiver) -- (destination)
+		node[label] {Сообщение};
+
+	% Помехи
+	\draw[->, red, thick] ([yshift=0.5cm]channel.north) node[above] {Помехи} -- (channel.north);
+\end{tikzpicture}
