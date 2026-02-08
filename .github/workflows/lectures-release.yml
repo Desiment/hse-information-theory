@@ -2,8 +2,12 @@ name: Build Lectures PDF
 
 on:
   push:
-    tags:
-      - 'v*'
+    paths:
+      - 'src/lectures/**/*.tex'
+      - 'src/lectures/.latexmkrc'
+      - 'src/configuration/**'
+      - 'docker/latex/**'
+      - '.github/workflows/lectures-release.yml'
   workflow_dispatch:
 
 permissions:
