@@ -1,0 +1,65 @@
+name: Build Lectures PDF
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  pdf:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build the toolchain image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: docker/latex/Dockerfile
+          tags: latex-ci:latest
+          load: true
+          push: false
+          cache-from: type=gha,scope=latex-image
+          cache-to: type=gha,scope=latex-image,mode=max
+
+      - name: Cache latexmk aux files
+        id: latex-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            src/lectures/build
+          key: latex-build-${{ runner.os }}-${{ hashFiles('docker/latex/Dockerfile','src/lectures/.latexmkrc','src/lectures/**/*.tex','src/configuration/**/*') }}
+          restore-keys: |
+            latex-build-${{ runner.os }}-
+
+      - name: Build lectures PDF
+        run: |
+          docker run --rm \
+            --mount type=bind,source="${{ github.workspace }}",target=/work \
+            -w /work/src/lectures \
+            latex-ci:latest \
+            latexmk -lualatex -interaction=nonstopmode -file-line-error -shell-escape
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lectures-pdf
+          path: src/lectures/notes.pdf
+
+      - name: Publish release asset
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: src/lectures/notes.pdf
+          fail_on_unmatched_files: true
