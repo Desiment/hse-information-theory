@@ -1,9 +1,28 @@
 ensure_path( 'LUAINPUTS', '../configuration//' );
 ensure_path( 'TEXINPUTS', '../configuration//' );
+@default_files = ('notes.tex');
 $pdf_mode=4;
 $lualatex = 'lualatex  %O -halt-on-error -synctex=1 --shell-escape %S';
 $out_dir = '.';
 $aux_dir = 'build';
+
+use File::Path qw(make_path);
+
+sub ensure_aux_subdirs {
+    my $chapters = 'chapters';
+    return 0 unless -d $chapters;
+    opendir(my $dh, $chapters) or return 0;
+    while (my $entry = readdir($dh)) {
+        next if $entry =~ /^\./;
+        my $src = "$chapters/$entry";
+        next unless -d $src;
+        make_path("$aux_dir/$src");
+    }
+    closedir($dh);
+    return 0;
+}
+
+add_hook( 'before_xlatex', \&ensure_aux_subdirs );
 
 our @memoize_extract = ( 'memoize-extract.pl' );
 our @memoize_clean = ( 'memoize-clean.pl' );
