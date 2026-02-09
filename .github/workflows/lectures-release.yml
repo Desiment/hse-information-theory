@@ -2,12 +2,8 @@ name: Build Lectures PDF
 
 on:
   push:
-    paths:
-      - 'src/lectures/**/*.tex'
-      - 'src/lectures/.latexmkrc'
-      - 'src/configuration/**'
-      - '.github/workflows/lectures-release.yml'
-  workflow_dispatch:
+    tags:
+      - "v*"
 
 permissions:
   contents: write
@@ -61,6 +57,7 @@ jobs:
           path: src/lectures/notes.pdf
 
       - name: Publish release asset
+        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v1
         with:
           files: src/lectures/notes.pdf
