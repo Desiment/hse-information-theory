@@ -1,0 +1,57 @@
+% !TeX root = seminar-07.tex
+% !TeX spellcheck = ru-RU
+% !TeX encoding = UTF-8 Unicode
+% !BIB program = biber
+% LTeX: language=ru-RU
+% LTeX: enablePickyRules=true
+%
+% Copyright (c) 2026 Михаил Михайлов
+%
+% This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+% International License. To view a copy of this license, visit:
+% http://creativecommons.org/licenses/by-nc-sa/4.0/
+%
+% You are free to:
+%   Share - copy and redistribute the material in any medium or format
+%   Adapt - remix, transform, and build upon the material
+%
+% Under the following terms:
+%   Attribution - You must give appropriate credit, provide a link to the license,
+%                 and indicate if changes were made.
+%   NonCommercial - You may not use the material for commercial purposes.
+%   ShareAlike - If you remix, transform, or build upon the material, you must
+%                distribute your contributions under the same license as the original.
+%
+% See the LICENSE file in the repository root for full license text.
+
+\documentclass[seminar, recordsfile={../records.lua}]{practice}
+\input{preamble}
+\renewcommand{\SeminarName}{Приложения! Или нет...?}
+\renewcommand{\SeminarDate}{27 февраля 2026}
+
+\xsimsetup{
+	solution/print = false
+}
+
+\begin{document}
+
+\begin{exercise}
+	Пусть $\xi$ --- дискретная случайная величина со значениями в множестве $\mathcal{X}$, $g \colon \mathcal{X} \to \mathcal{Y}$ --- произвольная функция. Покажите что $\H(g(\xi)) \leq \H(\xi)$. Верно ли аналогичное утверждение для непрерывных величин?
+\end{exercise}
+\begin{exercise}
+	Пусть $g$ --- диффеоморфизм, $\xi, \eta$ --- а.н.с.в со значениями в $\R^d$. Докажите что KL-дивергенция не изменяется при замене переменных: $\KL(g(\xi) | g(\eta)) = \KL(\xi | \eta)$.
+\end{exercise}
+\begin{exercise}
+	Предположим, что дан набор данных $\mathcal{D} = \set{(y, x)}_{i = 1}^{n}$, и известно что $y = f(x) + \varepsilon$:
+	\begin{align*}
+		& \E[Y | X = x] = \alpha + \beta x \\
+		& \D[Y | X = x] = \sigma^2 
+	\end{align*}
+	Запишите:
+	\begin{itemize}
+		\item $p_{\theta}(x, y)$ на основе принципа максимума энтропии
+		\item Процедуру для оценки параметров $\theta$ за счет минимизации $\KL$-дивергенции 
+	\end{itemize}
+\end{exercise}
+
+\end{document}

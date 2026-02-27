@@ -1,0 +1,328 @@
+% !TeX root = ../../notes.tex
+% !TeX spellcheck = ru-RU
+% !TeX encoding = UTF-8 Unicode
+% !BIB program = biber
+% LTeX: language=ru-RU
+% LTeX: enablePickyRules=true
+% Copyright (c) 2026 Михаил Михайлов
+%
+% This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+% International License. To view a copy of this license, visit:
+% http://creativecommons.org/licenses/by-nc-sa/4.0/
+%
+% You are free to:
+%   Share - copy and redistribute the material in any medium or format
+%   Adapt - remix, transform, and build upon the material
+%
+% Under the following terms:
+%   Attribution - You must give appropriate credit, provide a link to the license,
+%                 and indicate if changes were made.
+%   NonCommercial - You may not use the material for commercial purposes.
+%   ShareAlike - If you remix, transform, or build upon the material, you must
+%                distribute your contributions under the same license as the original.
+%
+% See the LICENSE file in the repository root for full license text.
+
+
+
+\section{Энтропия случайных величин}
+\localtableofcontents
+
+\subsection{Энтропия дискретных случайных величин}
+
+
+Пусть $\xi_1, \ldots, \xi_n$ --- набор дискретных случайных величин, принимающих значения из конечных множеств $\mathcal{X}_1, \ldots, \mathcal{X}_n$ соответственно. С ними естественным образом можно связать полную систему событий — опыт:
+\[
+	\mathcal{A}(\xi_1, \ldots, \xi_n) = \bigl\{ \{\xi_1 = x_1, \ldots, \xi_n = x_n\} \;\big|\; x_1 \in \mathcal{X}_1, \ldots, x_n \in \mathcal{X}_n \bigr\},
+\]
+где вероятность события определяется совместным распределением:
+\[
+	\P(\xi_1 = x_1, \ldots, \xi_n = x_n) = p_{\xi_1\ldots\xi_n}(x_1,\ldots,x_n).
+\]
+
+\begin{definition}[Энтропия случайной величины]
+	Энтропией дискретной случайной величины $\xi$ называется энтропия соответствующего опыта:
+	\[
+		\H_m(\xi) := \H_m(\mathcal{A}(\xi)) = -\sum_{x \in \mathcal{X}} p_\xi(x) \log_m p_{\xi}(x)
+	\]
+\end{definition}
+
+\begin{definition}[Совместная энтропия]
+	Совместной энтропией набора случайных величин $\xi_1, \ldots, \xi_n$ называется энтропия опыта, соответствующего их совместному распределению:
+	\[
+		\H_m(\xi_1, \ldots, \xi_n) \coloneqq \H_m(\mathcal{A}(\xi_1, \ldots, \xi_n)) = -\sum_{x_1,\ldots,x_n} p_{\xi_1\ldots\xi_n}(x_1,\ldots,x_n) \log_m p_{\xi_1\ldots\xi_n}(x_1,\ldots,x_n),
+	\]
+	где сумма идет по всем возможным значениям $x_1, \ldots, x_n$ величин $\xi_1, \ldots, \xi_n$;
+\end{definition}
+
+\begin{definition}[Условная энтропия]
+	Условной энтропией $\xi$ при условии $\eta$ называется условная энтропия соответствующих опытов:
+	\[
+		\H_m(\xi | \eta) \coloneqq \H_m(\mathcal{A}(\xi) | \mathcal{A}(\eta)) = -\sum_{y \in \mathcal{Y}} p_{\eta}(y) \sum_{x \in \mathcal{X}} p_{\xi | \eta}(x | y) \log_m p_{\xi | \eta}(x | y)
+	\]
+	где $p_{\xi | \eta}(x | y)$ означает условную вероятность $\P(\xi = x | \eta = y)$
+\end{definition}
+
+\begin{proposition}[Переход от опытов к случайным величинам]
+	Пусть $\mathcal{A}$ и $\mathcal{B}$ --- два опыта. Тогда существуют дискретные случайные величины $\xi$ и $\eta$ такие, что:
+	\[
+		\mathcal{A} = \mathcal{A}(\xi),\quad \mathcal{B} = \mathcal{A}(\eta),
+	\]
+	и все теоретико-информационные характеристики сохраняются.
+\end{proposition}
+\begin{proof}
+	Достаточно положить $\xi(\omega) = i_a$, если реализовалось событие $A_{i_a} \in \mathcal{A}$, и аналогично для $\eta$. Тогда распределение $\xi$ в точности совпадает с распределением исходов опыта $\mathcal{A}$, и все энтропийные величины (совместная, условная энтропия, взаимная информация) переходят в соответствующие характеристики случайных величин.
+\end{proof}
+\begin{corollary}[Независимость случайных величин]
+	Случайные величины $\xi$ и $\eta$ независимы тогда и только тогда, когда соответствующие опыты $\mathcal{A}(\xi)$ и $\mathcal{A}(\eta)$ независимы, что эквивалентно:
+	\[
+		\H_m(\xi,\eta) = \H_m(\xi) + \H_m(\eta) \quad \Longleftrightarrow \quad \I_m(\xi;\eta) = 0.
+	\]
+\end{corollary}
+\begin{proof}
+	Следует напрямую из определения.
+\end{proof}
+\begin{corollary}[Функциональная зависимость]
+	Дискретная случайная величина $\xi$ является функцией от дискретной случайной величины $\eta$ (т.е. $\xi = f(\eta) \text{ п.н.}$ для некоторой детерминированной функции $f$) тогда и только тогда, когда опыт $\mathcal{A}(\xi)$ определяется опытом $\mathcal{A}(\eta)$, что эквивалентно:
+	\[
+		\H_m(\xi | \eta) = 0 \quad \Longleftrightarrow \quad \I_m(\xi;\eta) = \H_m(\xi).
+	\]
+\end{corollary}
+\begin{proof}
+	Не умаляя общности, пусть $m = 2$, $\xi$ принимает значения из множества $\mathcal{X}$, $\eta$ принимает значения из множества $\mathcal{Y}$. В силу предложения \ref{prop:conditional-entropy-estimates}, для любого $x \in \mathcal{X}$ существует единственный $y_x \in \mathcal{Y}$ такой, что:
+	\[
+		\P(\xi = x | \eta = y_x) = 1 \quad \P(\xi \neq x | \eta = y_x) = 0
+	\]
+	Положим $f(x) = y_x$. Тогда $\xi = f(\eta)$ почти наверное, что и требовалось доказать.
+\end{proof}
+\begin{remark}[О терминологии]
+	В дальнейшем мы будем использовать обозначения $\H(\xi)$, $\H(\xi,\eta)$, $\H(\xi|\eta)$, $\I(\xi;\eta)$ для энтропийных характеристик случайных величин, подразумевая соответствующие характеристики опытов $\mathcal{A}(\xi)$, $\mathcal{A}(\eta)$. Все свойства, доказанные для опытов, автоматически переносятся на случайные величины.
+\end{remark}
+
+\subsection{Дифференциальная энтропия}
+\begin{definition}[Дифференциальная энтропия]
+	Пусть $\eta$ --- абсолютно непрерывная случайная величина (вектор) с плотностью распределения $p(\vx)$, заданной на $\R^d$. Дифференциальная энтропия (или энтропия непрерывного распределения с плотностью $p$) определяется как:
+	\[
+		h_m(\xi) = h_m(p) = - \int\limits_{\mathbb{R}^d} p(\vx) \log_m p(\vx) \dif\vx,
+	\]
+\end{definition}
+\begin{remark}
+	Как и ранее, считается что $0 \cdot \log 0 = 0$.
+\end{remark}
+\begin{remark}
+	Дифференциальная энтропия может не существовать. Например, можно убедиться что для случайной величины с плотностью распределения
+	\[
+		f(x) = \begin{cases} \frac{\log 2}{x \log^2(x)} & x \geq 2 \\ 0 & x < 2 \end{cases} 
+	\]
+	интеграл из определения диффернциальной энтропии разойдется. Однако, для абсолютно-непрерывных случайных величин $\xi$, у которых носитель $\operatorname{supp}(\xi) = \Cl(\set{\vx \in \R^d | p_{\xi}(\vx) > 0})$ компактен, диффернциальная энтропия конечна.
+\end{remark}
+\begin{notation}
+	Для диффернциальной энтропии стандартным основанием будем считать $e$: $h(\xi) = h_{e}(\xi)$
+\end{notation}
+\begin{example}[Равномерное распределение]
+	Пусть $\xi \sim \Uniform(a,b)$, тогда $p_{\xi}(x) = \frac{1}{b-a}$ на $[a,b]$. 
+	\[
+		h(\xi) = - \int_a^b \frac{1}{b-a} \ln \frac{1}{b-a}\dif x = \ln (b-a) \ \text{ нат}.
+	\]
+	При $b-a < 1$ дифференциальная энтропия отрицательна.
+\end{example}
+
+
+\begin{Lemma}[Неравенство Гиббса --- непрерывный случай]
+	\label{lem:gibbs-continuous}
+	Пусть $p_{\xi}(\vx)$, $p_{\eta}(\vx)$ --- плотности случайных величин $\xi$ и $\eta$, причем для любого $\vx \in \R^d$ выполнено, что $p_{\eta}(\vx) = 0 \Rightarrow p_{\xi}(\vx) = 0$. Тогда:
+	\[
+		-\int\limits_{\R^d} p_{\xi}(\vx)\log_m p_{\xi}(\vx)\dif\vx \leq -\int\limits_{\R^d}p_{\xi}(\vx)\log_m p_{\eta}(\vx)\dif\vx
+	\]
+	Причем равенство тогда и только тогда, когда $p_{\xi} = p_{\eta}$ почти всюду.
+\end{Lemma}
+\begin{proof}
+	Запишем неравенство в следующем виде\footnote{Здесь и далее, считаем что $0 \cdot \log \frac{0}{0} = 0$}:
+	\[
+		\int\limits_{\R^d} p_{\xi}(\vx)\log \frac{p_{\eta}(\vx)}{p_{\xi}(\vx)}\dif\vx \leq 0
+	\]
+	Дальше, поскольку $p_{\xi}(\vx)\dif\vx = \dif \P_{\xi}$ (где $\P_{\xi}$ --- распределение $\xi$), мы можем записать неравенство в виде:
+	\[
+		\int\limits_{\R^d}\log \frac{p_{\eta}(\vx)}{p_{\xi}(\vx)}\dif\P_{\xi} \leq 0
+	\]
+	Применим неравенство Йенсена:
+	\[
+		\int\limits_{\R^d}\log \frac{p_{\eta}(\vx)}{p_{\xi}(\vx)}\dif\P_{\xi} \leq 	\log(\int\limits_{\R^d}\frac{p_{\eta}(\vx)}{p_{\xi}(\vx)}\dif\P_{\xi})
+	\]
+	Дальше, заметим что $\frac{p_{\eta}(\vx)}{p_{\xi}(\vx)} = \frac{\dif\P_{\eta}}{\dif\P_{\xi}}$; поэтому
+	\[
+		\int\limits_{\R^d}\frac{p_{\eta}(\vx)}{p_{\xi}(\vx)}\dif\P_{\xi} =  \int\limits_{\R^d}\dif\P_{\eta} = 1
+	\]
+	Откуда:
+	\[
+		\int\limits_{\R^d}\log \frac{p_{\eta}(\vx)}{p_{\xi}(\vx)}\dif\P_{\xi} 
+		= \int\limits_{\R^d}\log \frac{p_{\eta}(\vx)}{p_{\xi}(\vx)}\dif\P_{\xi} 
+		\leq \log(\int\limits_{\R^d}\frac{p_{\eta}(\vx)}{p_{\xi}(\vx)}\dif\P_{\xi})
+		= \log(\int\limits_{\R^d}\frac{p_{\eta}(\vx)}{p_{\xi}(\vx)}\dif\P_{\xi})
+		= \log(\int\limits_{\R^d}\dif\P_{\eta})
+		= \log(1)
+		= 0
+	\]
+	Что и требовалось доказать. Равенство достигается тогда и только тогда, когда $\frac{p_{\xi}}{p_{\eta}}$ постоянна почти всюду. Из условия $\int_{\R^d}p_{\xi}(\vx)\dif\vx = \int_{\R^d}p_{\eta}(\vx)\dif\vx = 1$, получаем что $p_\xi = p_{\eta}$ почти всюду.
+\end{proof}
+\begin{corollary}[Максимум дифференциальной энтропии на отрезке]
+	Среди всех абсолютно непрерывных распределений, сосредоточенных на отрезке $[a,b]$, максимальную дифференциальную энтропию имеет равномерное распределение $\Uniform(a,b)$, и она равна $\log_m(b-a)$.
+\end{corollary}
+\begin{proof}
+	Пусть $p(x)$ --- произвольная плотность на $[a,b]$, $q(x) = \frac{1}{b-a}$ — плотность равномерного распределения. По неравенству Гиббса (лемма \ref{lem:gibbs-continuous}):
+	\[
+		h_m(p) = -\int_a^b p(x)\ln p(x)\dif x \leq -\int_a^b p(x)\ln q(x)\dif x = -\int_a^b p(x)\log\frac{1}{b-a}\,dx = \log(b-a).
+	\]
+	Равенство достигается при $p = q$ почти всюду.
+\end{proof}
+
+\begin{remark}[Связь с дискретной энтропией через квантование]
+	Если дискретизировать непрерывную случайную величину $\xi$ с шагом $\Delta$, рассматривая $\xi^{\Delta} = i\Delta$ при $x \in [i\Delta, (i+1)\Delta), i \in \Z$, то при малых $\Delta$:
+	\begin{multline*}
+		\H_m(\xi^{\Delta}) = -\sum_{i} \P(\xi \in [i\Delta; (i+1)\Delta))\log_m\P(\xi \in [i\Delta; (i+1)\Delta))  \approx \\
+		-\sum_i p_{\xi}(x_i)\Delta \log_m(p_{\xi}(x_i)\Delta) =  -\sum_i p_{\xi}(x_i)\Delta \log_m(p_{\xi}(x_i)\Delta) - \log_m\Delta\sum_i p_{\xi}(x_i)\Delta \\\approx -\int f(x)\log_m f(x)\dif x - \log_m\Delta.
+	\end{multline*}
+	Таким образом,
+	\[
+		h_m(\xi) = \lim_{\Delta \to 0} [\H_m(\xi^{\Delta}) + \log_m \Delta].
+	\]
+	Дифференциальная энтропия --- это предел энтропии Шеннона с точностью до аддитивной константы, стремящейся к бесконечности. В связи с этим, можно было бы ожидать что многие свойства энтропии Шеннона сохранятся, однако это не так: например $h(\xi)$ может принимать нулевое или даже отрицательные значения. Также, в отличие от энтропии Шеннона, дифференциальная энтропия не инвариантна при замене переменных: для дискретной случайной величины~$\xi$ и любой биекции $g$ энтропия $g(\xi)$ будет совпадать с $\xi$, в то время как у дифференциальной энтропии это не так.
+\end{remark}
+
+\begin{proposition}[Замена переменных]
+	Пусть $g \colon \R^d \to \R^d$ --- диффеоморфизм, $\xi = g(\eta)$. Тогда:
+	\[
+		h_m(\eta) = h_m(\xi) - \int\limits_{\R^d}p_{\xi}(\vx)\log_m\abs{\det J_g(\vx)}\dif\vx
+	\]
+	где $J_g(\vx)$ ---  матрица Якоби преобразования $g$.
+\end{proposition}
+\begin{proof}
+	Не умаляя общности $m = e$. Вычислим $\P(\eta \in A)$ для произвольного $A$ двумя способами:
+	\[
+		\P(\eta \in A) = \int\limits_{A} p_{\eta}(\vx)\dif \vx = \int\limits_{g(A)} p_{\xi}(\vy)\dif\vy \ \overset{\vy = g(\vx)}{=}\  \int\limits_{A} p_{\xi}(g((\vx))\abs{\det J_g(\vx)} \dif\vx.
+	\]
+	Значит, плотность $\eta$ выражается через плотность $\xi$ по следующей формуле замены переменных:
+	\[
+		p_{\eta}(\vx) = p_{\xi}(g(\vx)) \cdot \abs{\det J_{g}(\vx)} 
+	\]
+	Вычислим дифференциальную энтропию $\eta$:
+	\begin{align*}
+		h(\eta) &= -\int\limits_{\R^d} p_{\eta}(\vx) \ln p_{\eta}(\vx) \dif \vx
+				 = -\int\limits_{\R^d} p_{\xi}(g(\vx)) \cdot \abs{\det J_g(\vx)} \cdot \ln(p_{\xi}(g(\vx))\cdot \abs{\det J_g(\vx)})\dif\vx \\
+				&= -\int\limits_{\R^d} p_{\xi}(g(\vx)) \cdot \ln(p_{\xi}(g(\vx))) \cdot \abs{\det J_g(\vx)}\dif\vx - \int_{\R^d}p_{\xi}(\vx)\ln \abs{\det J_g(\vx)}\dif\vx \\
+				& = -\int\limits_{\R^d} p_{\xi}(\vy) \cdot \ln p_{\xi}(\vy) \dif\vy - \int\limits_{\R^d}p_{\xi}(\vx)\ln\abs{\det J_g(\vx)}\dif\vx
+				  = h(\xi) - \int\limits_{\R^d}p_{\xi}(\vx)\ln\abs{\det J_g(\vx)}\dif\vx
+	\end{align*}
+\end{proof}
+\begin{corollary}[Сдвиг]
+	Если $\xi = \eta + \vb$ для случайного вектора $\xi \in \R^d$ и вектора $\vb \in \R^d$, то:
+	\[
+		h_m(\eta) = h_m(\xi) 
+	\]
+\end{corollary}
+\begin{corollary}[Масштабирование]
+	Если $\xi = A\eta$ для случайного вектора $\xi \in \R^d$ и невырожденной матрицы $A$, то:
+	\[
+		h_m(\eta) = h_m(\xi) - \log_m\abs{\det A}.
+	\]
+\end{corollary}
+
+% TODO: исправить во всех доказательствах \log_m -> на значение по умолчанию, \ln
+\subsection{Условная и совместная дифференциальная энтропия}
+
+\begin{definition}[Совместная дифференциальная энтропия]
+	Пусть $\xi_1, \ldots, \xi_n$ --- абсолютно непрерывные случайные величины (векторы) с совместной плотностью распределения $p_{\xi_1\ldots\xi_n}(\vx_1,\ldots,\vx_n)$, заданной на $\R^{d}, d = d_1 + \ldots + d_n$. Совместной дифференциальной энтропией набора $\xi_1, \ldots, \xi_n$ называется величина:
+	\[
+		h_m(\xi_1, \ldots, \xi_n) \coloneqq -\int\limits_{\R^{d}} p_{\xi_1\ldots\xi_n}(\vx_1,\ldots,\vx_n) \log_m p_{\xi_1\ldots\xi_n}(\vx_1,\ldots,\vx_n) \dif\vx_1\ldots\dif\vx_n.
+	\]
+\end{definition}
+
+\begin{definition}[Условная дифференциальная энтропия]
+	Пусть $\xi$ и $\eta$ --- абсолютно непрерывные случайные величины (векторы) с совместной плотностью распределения $p_{\xi, \eta}(\vx,\vy)$ и условной плотностью $p_{\xi|\eta}(\vx|\vy) = \frac{p_{\xi\eta}(\vx,\vy)}{p_\eta(\vy)}$. Условной дифференциальной энтропией $\xi$ при условии $\eta$ называется величина:
+	\[
+		h_m(\xi | \eta) \coloneqq -\int\limits_{\mathbb{R}^{d_1}} p_\eta(\vy) \int\limits_{\mathbb{R}^{d_2}} p_{\xi|\eta}(\vx|\vy) \log_m p_{\xi|\eta}(\vx|\vy) \dif\vx \dif\vy,
+	\]
+	где $d_1$ -- размерность $\eta$, $d_2$ --- размерность $\xi$.
+\end{definition}
+\begin{remark}
+	Из теоремы Фубини, для достаточно \enquote{хорошей} совместной плотности, можем получить что: 
+	\[
+		h_m(\xi | \eta) = -\smashoperator{\int\limits_{\mathbb{R}^{d_1 + d_2}}} p_{\xi\eta}(\vx,\vy) \log_m p_{\xi|\eta}(\vx|\vy) \dif\vx \dif\vy.
+	\]
+\end{remark}
+\begin{proposition}[Правило цепочки для дифференциальной энтропии]
+	\label{prop:chain-rule-diff}
+	Для абсолютно непрерывных случайных величин $\xi$ и $\eta$ выполняется соотношение:
+	\[
+		h_m(\xi,\eta) = h_m(\xi) + h_m(\eta | \xi) = h_m(\eta) + h_m(\xi | \eta).
+	\]
+	В общем случае для набора $\xi_1, \ldots, \xi_n$:
+	\[
+		h_m(\xi_1, \ldots, \xi_n) = \sum_{i=1}^n h_m(\xi_i | \xi_{i-1}, \ldots, \xi_1).
+	\]
+	\end{proposition}
+\begin{proof}
+	Доказательство повторяет рассуждения дискретного случая mutatis mutandis. Для базового случая заметим, что $p_{\xi\eta}(\vx,\vy) = p_\xi(\vx) p_{\eta|\xi}(\vy|\vx)$. Тогда (интегралы берутся по всему пространству):
+	\begin{align*}
+		h_m(\xi,\eta) &= -\iint p_{\xi\eta}(\vx,\vy) \log_m p_{\xi\eta}(\vx,\vy) \dif\vx \dif\vy \\
+		&= -\iint p_{\xi\eta}(\vx,\vy) \log_m (p_\xi(\vx) p_{\eta|\xi}(\vy|\vx)) \dif\vx \dif\vy \\
+		&= -\iint p_{\xi\eta}(\vx,\vy) \log_m p_\xi(\vx) \dif\vx \dif\vy - \iint p_{\xi\eta}(\vx,\vy) \log_m p_{\eta|\xi}(\vy|\vx) \dif\vx \dif\vy.
+	\end{align*}
+	В первом слагаемом интегрирование по $\vy$ даёт единицу, и оно превращается в $-\int p_\xi(\vx) \log_m p_\xi(\vx) \dif\vx = h_m(\xi)$. Второе слагаемое в точности равно $h_m(\eta|\xi)$ по определению. Общий случай доказывается последовательным применением правила цепочки.
+\end{proof}
+
+\begin{proposition}[Свойства условной дифференциальной энтропии]
+	\label{prop:cond-diff-entropy-props}
+	Для абсолютно непрерывных случайных величин $\xi$ и $\eta$ справедливы следующие свойства:
+	\begin{enumerate}
+		\item \textbf{Убывание по условию}: $h_m(\xi | \eta) \leq h_m(\xi)$, причём равенство достигается тогда и только тогда, когда $\xi$ и $\eta$ независимы.
+		\item \textbf{Условный аналог правила цепочки}:
+			\[
+				h_m(\xi, \eta | \zeta) = h_m(\xi | \zeta) + h_m(\eta | \xi, \zeta).
+			\]
+	\end{enumerate}
+\end{proposition}
+\begin{proof}\ 
+	\begin{enumerate}
+		\item Используя и неравенство Гиббса (лемма \ref{lem:gibbs-continuous}):
+			\[
+				h_m(\xi) - h_m(\xi|\eta) = \iint p_{\xi\eta}(\vx,\vy) \log_m \frac{p_{\xi|\eta}(\vx|\vy)}{p_\xi(\vx)} \dif\vx \dif\vy = \iint p_{\xi\eta}(\vx,\vy) \log_m \frac{p_{\xi\eta}(\vx,\vy)}{p_\xi(\vx)p_\eta(\vy)} \dif\vx \dif\vy \geq 0,
+			\]
+			Равенство достигается тогда и только тогда, когда $p_{\xi\eta}(\vx,\vy) = p_\xi(\vx)p_\eta(\vy)$ почти всюду, что эквивалентно независимости $\xi$ и $\eta$.
+		
+		\item Следует из применения правила цепочки к условным распределениям.
+	\end{enumerate}
+\end{proof}
+\begin{remark}
+	При этом, в отличие от дискретного случая, добавление новых случайных величин может как увеличивать, так и уменьшать дифференциальную энтропию. Например, для независимых $\xi, \eta \sim \Uniform(0,\tfrac12)$ имеем $h_2(\xi) = h_2(\eta) = -1$, $h_2(\xi,\eta) = -2$.
+\end{remark}
+\begin{proposition}[Свойства совместной дифференциальной энтропии]
+	Для абсолютно непрерывных случайных величин $\xi_1, \ldots, \xi_n$ справедливы следующие свойства:
+	\begin{enumerate}
+		\item \textbf{Симметричность:} $h_m(\xi_1, \ldots, \xi_n)$ симметрична относительно перестановки аргументов.
+		\item \textbf{Субардитивность:} 
+			\[
+				h_m(\xi_1, \ldots, \xi_n) \leq \sum_{i=1}^n h_m(\xi_i),
+			\]
+			причём равенство достигается тогда и только тогда, когда $\xi_1, \ldots, \xi_n$ независимы в совокупности.
+	\end{enumerate}
+\end{proposition}
+\begin{proof}
+	Симметричность непосредственно следует из определения.
+		
+	Субардитивность докажем по индукции, используя правило цепочки (предложение \ref{prop:chain-rule-diff}) и свойство убывания по условию (предложение \ref{prop:cond-diff-entropy-props}):
+			\begin{align*}
+				h_m(\xi_1, \ldots, \xi_n) &= h_m(\xi_1) + h_m(\xi_2, \ldots, \xi_n | \xi_1) \\
+				&\leq h_m(\xi_1) + \sum_{i=2}^n h_m(\xi_i | \xi_1, \ldots, \xi_{i-1}) \quad \text{(по индукции)} \\
+				&\leq h_m(\xi_1) + \sum_{i=2}^n h_m(\xi_i) \quad \text{(по свойству убывания по условию)}.
+			\end{align*}
+			Равенство достигается тогда и только тогда, когда для каждого $i$ выполнено $h_m(\xi_i | \xi_1, \ldots, \xi_{i-1}) = h_m(\xi_i)$, что эквивалентно тому что $p_{\xi_i | \xi_{i - 1}, \ldots, \xi_{1}}(\vx_i | \vx_{i - 1}, \ldots, \vx_{1}) = p_{\xi_i}(\vx_i)$, и значит:
+			\[
+				p_{\xi_1, \ldots, \xi_n}(\vx_1, \ldots, \vx_n) = \prod_{i = 1}^{n} p_{\xi_i | \xi_{i - 1}, \ldots, \xi_{1}}(\vx_i | \vx_{i - 1}, \ldots, \vx_{1}) = \prod_{i = 1}^{n} p_{\xi_i}(\vx_i).
+			\]
+			Что означает что $\xi_1, \ldots, \xi_n$ независимы в совокупности.
+\end{proof}
+
+% \subsection{Сравнение энтропии Шеннона и диффернциальной энтропии}
+% TODO: сделать нормальную табличку 
+
