@@ -1,0 +1,88 @@
+% !TeX root = homework-01.tex
+% !TeX spellcheck = ru-RU
+% !TeX encoding = UTF-8 Unicode
+% !BIB program = biber
+% LTeX: language=ru-RU
+% LTeX: enablePickyRules=true
+%
+% Copyright (c) 2026 Михаил Михайлов
+%
+% This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+% International License. To view a copy of this license, visit:
+% http://creativecommons.org/licenses/by-nc-sa/4.0/
+%
+% You are free to:
+%   Share - copy and redistribute the material in any medium or format
+%   Adapt - remix, transform, and build upon the material
+%
+% Under the following terms:
+%   Attribution - You must give appropriate credit, provide a link to the license,
+%                 and indicate if changes were made.
+%   NonCommercial - You may not use the material for commercial purposes.
+%   ShareAlike - If you remix, transform, or build upon the material, you must
+%                distribute your contributions under the same license as the original.
+%
+% See the LICENSE file in the repository root for full license text.
+
+\documentclass[homework, recordsfile={../records.lua}]{practice}
+
+\renewcommand{\HomeworkNumber}{1, теоритическая часть}
+\renewcommand{\HomeworkDeadline}{28 февраля 2025}
+\newcommand{\addpt}[1]{(\textit{\addpoints{#1}})}
+\begin{document}
+
+
+\begin{exercise}[Алгоритм Хаффмана]
+	Пусть $\mathcal{A} = \{a_1, \ldots, a_r\}$ --- алфавит источника, с вероятностями символов $\mathcal{P} = \{p_1, \ldots, p_r\}$, $\Sigma = \{0, 1\}$ --- алфавит кодировщика. Для однозначно декодируемого кода $f \colon \mathcal{A} \to \Sigma^*$ за $C^{f}$ обозначим набор $\{f(a_1), \ldots, f(a_r)\}$. Напомним что средней длинной кода $f$ называется величина:
+	$$ L(C^f) = \sum_{i = 1}^{r} p_i |C_i^f| $$
+
+\begin{enumerate}
+	\item \addpt{1} Пусть $f$ --- некоторый однозначно-декодируемый код. Покажите что существует префиксный код $g$ такой, что $L(C^{g}) = L(C^{f})$
+	\item \addpt{1} Пусть $f$ --- некоторый префиксный код, $x, y \in \mathcal{A}$ --- два символа с наименьшими вероятностями $p_x$ и $p_y$ (т.е. для любого другого символа из алфавита $a \in \mathcal{A}, a \neq x, a \neq y$ его вероятность  $p_a \geq \max(p_x, p_y)$).
+Докажите что существует префиксный код $g$ такой, что:
+	\begin{itemize}[compact]
+	    \item код $g$ не хуже кода $f$: $L(C^{g}) \leq L(C^{f})$;
+		\item в коде $g$ кодовые слова символов $x$ и $y$ имеют одинаковую длину.
+	\end{itemize}
+\item \addpt{1} Пусть  $x, y \in \mathcal{A}$ два символа с наименьшими вероятностями $p_x, p_y$. Рассмотрим алфавит $\mathcal{A}'$ получаемый из алфавита $\mathcal{A}$ заменой символов $x$ и $y$ на некоторый новый символ $z$, вероятность которого равна $p_z = p_x + p_y$. Пусть $f'_1, f'_2$ --- два префиксных кода для алфавита $\mathcal{A}'$. Определим префиксные коды для алфавита $\mathcal{A}$ следующим образом:
+$$ f_1(a) = \begin{cases} f_1'(a) & a \neq x, y \\ f_1'(z)0 & a = x \\ f_1'(z)1 & a = y \end{cases} \qquad f_2(a) = \begin{cases} f_2'(a) & a \neq x, y \\ f_2'(z)0 & a = x \\ f_2'(z)1 & a = y \end{cases}$$
+Докажите что если $L(C^{f_1'}) \leq L(C^{f_2'})$, то и $L(C^{f_1}) \leq L(C^{f_2})$
+\item \addpt{2} Пусть $C^H$ обозначает код Хаффмана для алфавита $\mathcal{A}$. Докажите что $L(C^H) \leq L(C^f)$ для любого однозначно-декодируемого кода $f$
+\item \addpt{3} Пусть $C^H_n$ обозначает код Хаффмана для алфавита  $\mathcal{A}^n$ (алфавита состоящего из слов длины $n$). Положим что для слова $a_{i_1}\ldots a_{i_n}$ его вероятность равна $p_{i_1}\ldots p_{i_n}$. Докажите что:
+$$\lim_{n \to +\infty}\frac{L(C^{H}_n)}{n} =\mathrm{H}_2(p_1, \ldots, p_n)$$
+
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[subtitle=Энтропия для зависимых величин]
+	Рассмотрим последовательность дискретных случайных величин $\xi_1, \ldots, \xi_n$ со значениями из множества $\mathcal{X} = \set{x_1, \ldots, x_r}$, такую что:
+	\begin{enumerate}
+		\item Все они имеют одинаковое распределение: $\mathbb P(\xi_k = x_j) = \pi_j \quad \forall i = 1, \ldots, n$;
+		\item Они обладают \textbf{марковским свойством}: для любых $x_{i_1}, \ldots x_{i_k} \in \mathcal{X};\, k = 1, \ldots n$, таких, что условные вероятности ниже имеют смысл, выполнено:
+		$$\mathbb{P}(\xi_k = x_{i_k} | \xi_{k - 1} = x_{i_{k-1}}, \ldots, \xi_{1} = x_{i_1}) = \mathbb{P}(\xi_k = x_{i_k} | \xi_{k - 1} = x_{i_{k-1}}) $$
+		\item Выполнено свойство стационарности:
+		$$\mathbb{P}(\xi_{1} = x_{i_1}, \ldots, \xi_{k} = x_{i_k}) = \mathbb{P}(\xi_{t+1} = x_{i_1}, \ldots, \xi_{t+k} = x_{i_k}) \quad \text{для любых $x_{i_1}, \ldots x_{i_k} \in \mathcal{X};\, k = 1, \ldots n;\, t = 1, \ldots, n - k$}$$
+	\end{enumerate}
+
+	\textbf{Задачи}:
+	\begin{enumerate}
+		\item \addpt{1} Обозначим $p_{j \to i} = \mathbb{P}(\xi_{2} = x_i | \xi_{1} = x_j)$ --- так называемые \textbf{вероятности переходов}. Предположим что все вероятности переходов  положительны: $p_{j \to i} > 0$ для всех $i, j = 1, \ldots r$. Докажите что тогда вероятности значений также положительны: $\pi_j > 0$ для всех $j = 1, \ldots, r$
+		\item \addpt{1.5} Рассмотрим матрицу:
+		$$ 
+		P  = \begin{pmatrix}p_{1 \to 1} & p_{1 \to 2} & \cdots & p_{1 \to r} \\
+							p_{2 \to 1} &   \ddots    & \vdots & p_{2 \to r} \\
+							   \vdots   &   \cdots    & \ddots &  \vdots     \\
+							p_{r \to 1} & p_{r \to 2} & \cdots & p_{r \to r}
+			  \end{pmatrix}
+		$$
+		Докажите что вектор-строчка $\pi = (\pi_1, \ldots, \pi_r)$ является собственным вектором матрицы $P$ (т.е. $\pi P = \lambda\pi, \lambda \in \mathbb{R}$). Найдите соответствующее вектору $\pi$ собственное число $\lambda$.
+		\item \addpt{1.5} Покажите что условие 3 не следует из условий 1-2
+		\item \addpt{1.5} Выразите вероятность $\mathbb{P}(\xi_2 = x_j, \xi_1 = x_i)$  в терминах матрицы $P$ и вектора $\pi$.
+		\item \addpt{1.5} Выразите вероятность $\mathbb{P}(\xi_k = x_j | \xi_1 = x_i)$ в терминах матрицы $P$.
+		\item \addpt{1.5} Обозначим за $T = \mathrm{diag}(\pi_1, \ldots, \pi_r) \cdot P$. Докажите что:
+		$$\mathrm{H}_2(T) \coloneqq  -\sum_{i = 1}^{r}\sum_{j = 1}^{r} T_{ij} \log_2 T_{ij} = \frac{1}{n-1}\mathrm{H}_2(\xi_{1}, \ldots, \xi_{n}) + \frac{n-2}{n-1} \cdot \mathrm{H}_2(\xi_1)$$
+	\end{enumerate}
+\end{exercise}
+
+\PrintTotalPoints
+\end{document}

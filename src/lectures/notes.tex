@@ -4,6 +4,7 @@
 % !BIB program = biber
 % LTeX: language=ru-RU
 % LTeX: enablePickyRules=true
+%
 % Copyright (c) 2026 Михаил Михайлов
 %
 % This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0
@@ -39,11 +40,22 @@
 
 \setlength{\epigraphwidth}{0.75\linewidth}
 \renewcommand{\textflush}{flushepinormal}
+
 \chapter{Введение в теорию информации}
 \epigraph{Меня больше всего беспокоило, как это назвать. Я думал назвать это \enquote{информацией}, но это слово использовалось слишком часто, поэтому я решил назвать это \enquote{неопределённостью}. Когда я обсуждал это с Джоном фон Нейманом, у него возникла идея получше. Фон Нейман сказал мне: \enquote{Вам следует называть это энтропией по двум причинам. Во-первых, ваша функция неопределенности использовалась в статистической механике под этим именем, поэтому у неё уже есть имя. Во-вторых, что более важно, никто на самом деле не знает, что такое энтропия, поэтому в дебатах у вас всегда будет преимущество}}{Клод Шеннон, \enquote{отец} теории информации.}
 
 \localtableofcontents
 \include{chapters/chapter-01-info-theory/01-intro.tex}
 \include{chapters/chapter-01-info-theory/02-entropy.tex}
-%\include{chapters/chapter-01-info-theory/03-mutual-information.tex}
+\include{chapters/chapter-01-info-theory/03-mutual-information.tex}
+\include{chapters/chapter-01-info-theory/04-entropy-of-random-variables.tex}
+\include{chapters/chapter-01-info-theory/05-cross-entropy-kl-divergence.tex}
+
+\chapter{Некоторые приложения}
+\epigraph{Тот факт, что [данный] многочлен является приближением, необязательно уменьшает его полезность, поскольку все модели являются приближениями. В сущности, все модели неверны, но некоторые из них полезны.}{Джордж Бокс, британский статистик}
+
+\localtableofcontents
+\include{chapters/chapter-02-applications/01-trivial-applications.tex}
+
+
 \end{document}

@@ -1,0 +1,72 @@
+% !TeX root = seminar-05.tex
+% !TeX spellcheck = ru-RU
+% !TeX encoding = UTF-8 Unicode
+% !BIB program = biber
+% LTeX: language=ru-RU
+% LTeX: enablePickyRules=true
+%
+% Copyright (c) 2026 Михаил Михайлов
+%
+% This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+% International License. To view a copy of this license, visit:
+% http://creativecommons.org/licenses/by-nc-sa/4.0/
+%
+% You are free to:
+%   Share - copy and redistribute the material in any medium or format
+%   Adapt - remix, transform, and build upon the material
+%
+% Under the following terms:
+%   Attribution - You must give appropriate credit, provide a link to the license,
+%                 and indicate if changes were made.
+%   NonCommercial - You may not use the material for commercial purposes.
+%   ShareAlike - If you remix, transform, or build upon the material, you must
+%                distribute your contributions under the same license as the original.
+%
+% See the LICENSE file in the repository root for full license text.
+
+\documentclass[seminar, recordsfile={../records.lua}]{practice}
+
+\renewcommand{\SeminarName}{Энтропия, продолжение}
+\renewcommand{\SeminarDate}{13 февраля 2026}
+
+\xsimsetup{
+	solution/print = false
+}
+
+\usepackage{amssymb}
+\usepackage{bm}
+
+\DeclareMathOperator{\KL}{KL}
+\DeclareMathOperator{\Norm}{Norm}
+\newcommand{\h}{\mathrm{h}}
+
+\begin{document}
+
+\begin{exercise}
+	Пусть $\xi_1, \ldots, \xi_n$ --- независимые случайные величины, принимающие значения на множестве $\set{1, \ldots, k}$ с вероятностями $p_1, \ldots, p_k$ соответственно. Обозначим за $\eta_{r} = \# i \text{ таких что } \xi_i = r$. Найдите энтропию
+	$$
+		\H_m(\eta_1, \ldots, \eta_r)
+	$$
+\end{exercise}
+\begin{exercise}
+	Пусть $n, k \in \N$, $n \geq k$; Тогда для всех $m > 1$:
+	\[
+		\log_m\binom{n}{k} \leq n \cdot \H_m(\frac{k}{n})
+	\]
+\end{exercise}
+\begin{exercise}
+	Пусть $n \in \N$. Тогда для всех $k \leq \floor{\frac{n}{2}}$ и всех $m > 1$:
+	\[
+		\sum_{i = 0}^{k}\binom{n}{i} \leq m^{n\H_m(\frac{k}{n})}
+	\]
+\end{exercise}
+\begin{exercise}
+	Пусть $g$ --- диффеоморфизм, $\xi$ --- абсолютно непрерывная одномерная с.в., $\eta = g(\xi)$; Выразите $h(\eta)$ через $h(\xi)$.
+\end{exercise}
+\begin{exercise}
+	Найдите $\h(Y)$ для $Y \sim \Exp(\lambda)$.
+\end{exercise}
+\begin{exercise}
+	Найдите $\h(Y)$ для $Y \sim \mathcal{N}(\mu, \lambda)$.
+\end{exercise}
+\end{document}

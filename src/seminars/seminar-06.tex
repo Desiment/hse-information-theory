@@ -1,0 +1,64 @@
+% !TeX root = seminar-06.tex
+% !TeX spellcheck = ru-RU
+% !TeX encoding = UTF-8 Unicode
+% !BIB program = biber
+% LTeX: language=ru-RU
+% LTeX: enablePickyRules=true
+%
+% Copyright (c) 2026 Михаил Михайлов
+%
+% This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+% International License. To view a copy of this license, visit:
+% http://creativecommons.org/licenses/by-nc-sa/4.0/
+%
+% You are free to:
+%   Share - copy and redistribute the material in any medium or format
+%   Adapt - remix, transform, and build upon the material
+%
+% Under the following terms:
+%   Attribution - You must give appropriate credit, provide a link to the license,
+%                 and indicate if changes were made.
+%   NonCommercial - You may not use the material for commercial purposes.
+%   ShareAlike - If you remix, transform, or build upon the material, you must
+%                distribute your contributions under the same license as the original.
+%
+% See the LICENSE file in the repository root for full license text.
+
+\documentclass[seminar, recordsfile={../records.lua}]{practice}
+\input{preamble}
+\renewcommand{\SeminarName}{KL-дивергенция и много-много нормального распределения}
+\renewcommand{\SeminarDate}{20 февраля 2026}
+
+\xsimsetup{
+	solution/print = false
+}
+
+\begin{document}
+\begin{exercise}
+	Найдите $h(\xi)$ для $\xi \sim \mathcal{N}(\mu, \sigma^2)$.
+\end{exercise}
+\begin{exercise}
+	Найдите $\KL(\mathcal{N}(\mu_1, \sigma_1^2) | \mathcal{N}(\mu_2, \sigma_2^2))$.
+\end{exercise}
+\begin{exercise}
+	Докажите что среди всех а.н. распределений с носителем $\R$, средним $\mu$ и дисперсией $\sigma^2$, максимальную дифференциальную энтропию имеет $\mathcal{N}(\mu, \sigma^2)$.
+\end{exercise}
+\begin{definition}
+	Случайный вектор $\xi$ имеет многомерное нормальное распределение $\mathcal{N}(\mu, \Sigma)$ где $\mu \in \R^d$ --- вектор средних, а $\Sigma \in \R^{d \times d}$ --- матрица ковариаций (положительно-определенная симметричная матрица), если
+	$$
+	f_{\xi}(x) = \frac{1}{\sqrt{(2\pi)^k \det \Sigma}} \cdot \exp(-\frac{1}{2} (x - \mu)^{\mathrm{T}}\Sigma(x - \mu))
+	$$
+\end{definition}
+\begin{proposition}
+	Пусть $\xi = (\xi_1, \ldots, \xi_d) \sim \mathcal{N}(\mu, \Sigma)$. Тогда $\xi_k \sim \mathcal{N}(\mu_k, \Sigma_{kk})$
+\end{proposition}
+\begin{exercise}
+	Найдите $h(\xi)$ для $\xi \sim \mathcal{N}(\mu, \Sigma), \mu \in \R^d, \Sigma \in \R^{d \times d}$. 
+\end{exercise}
+\begin{exercise}
+	Пусть $\xi = (\xi_1, \xi_2) \sim \mathcal{N}(\mu, \Sigma)$, $\mu = (\mu_1, \mu_2)$. Найдите $\I(\xi_1, \xi_2)$
+\end{exercise}
+\begin{exercise}
+	Пусть $g$ --- диффеоморфизм, $\xi, \eta$ --- а.н.с.в со значениями в $\R^d$. Докажите что KL-дивергенция не изменяется при замене переменных: $\KL(g(\xi) | g(\eta)) = \KL(\xi | \eta)$.
+\end{exercise}
+\end{document}

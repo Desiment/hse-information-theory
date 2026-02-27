@@ -1,0 +1,107 @@
+% !TeX root = seminar-04.tex
+% !TeX spellcheck = ru-RU
+% !TeX encoding = UTF-8 Unicode
+% !BIB program = biber
+% LTeX: language=ru-RU
+% LTeX: enablePickyRules=true
+%
+% Copyright (c) 2026 Михаил Михайлов
+%
+% This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+% International License. To view a copy of this license, visit:
+% http://creativecommons.org/licenses/by-nc-sa/4.0/
+%
+% You are free to:
+%   Share - copy and redistribute the material in any medium or format
+%   Adapt - remix, transform, and build upon the material
+%
+% Under the following terms:
+%   Attribution - You must give appropriate credit, provide a link to the license,
+%                 and indicate if changes were made.
+%   NonCommercial - You may not use the material for commercial purposes.
+%   ShareAlike - If you remix, transform, or build upon the material, you must
+%                distribute your contributions under the same license as the original.
+%
+% See the LICENSE file in the repository root for full license text.
+
+\documentclass[seminar, recordsfile={../records.lua}]{practice}
+\input{preamble.tex}
+
+\renewcommand{\SeminarName}{Энтропия. Приложения}
+\renewcommand{\SeminarDate}{6 февраля 2025}
+
+\xsimsetup{
+	solution/print = false
+}
+
+\begin{document}
+
+Пусть $\xi_1, \ldots, \xi_n$ --- набор дискретных случайных величин, принимающих значения из множеств $\mathcal{X}_1, \ldots, \mathcal{X}_n$ соответственно. С ними естественным образом можно связать полную систему событий:
+\[
+	\mathcal{A}(\xi_1, \ldots, \xi_n) = \set{\set{\xi_1 = x_1, \ldots, \xi_n = x_n} | x_1 \in \mathcal{X}_1, \ldots, x_n \in \mathcal{X}_n}
+\]
+Таким образом, можно говорить об энтропии случайной величины $\H(\xi_i)$, условной и совместной энтропии нескольких величин.
+
+\begin{exercise}[Энтропия бинарного события]
+	Пусть $\xi$ --- случайная величина имеющая распределение Бернулли $\Bern(p)$, т.е. $$\P(\xi = 0) = p, \P(\xi = 1) = q = 1 - p$$. Найдите $\H(\xi)$.
+\end{exercise}
+\begin{solution}
+	\[
+		\H(\xi) = \H(p, q) = - p \log p - q \log q
+	\]
+\end{solution}
+\begin{exercise}[Энтропия биномиальной схемы]
+	Пусть $\xi_1, \ldots, \xi_n$ --- независимые случайные величины, имеющие распределение Бернулли $\Bern(p)$. Чему равна энтропия $\H_n(\xi_1, \ldots, \xi_n)$. Чему равна энтропия $\H_n(\xi_1 + \ldots + \xi_n)$? Чему равна энтропия $$\H_n(\xi_1, \ldots, \xi_n | \xi_1 + \ldots + \xi_n)$$
+\end{exercise}
+\begin{solution}
+	Пусть $\mathcal{S}_{n, p}$ --- опыт, состоящий в проведении $n$ испытаний Бернулли с вероятностью успеха $p$ и измерении числа успехов. $S_k \in \mathcal{S}_{n,p}$ --- событие, означающее что произошло $k$ успехов\footnote{И само \(\mathcal{S}_{n,p} = \bigsqcup_{k} S_k\)}. Тогда
+	\begin{multline*}
+		\H(\mathcal{S}) =
+		- \sum_{k = 0}^{n} \binom{n}{k}p^{k}q^{n-k} \log(\binom{n}{k}p^{k}q^{n-k})
+		=\\=
+		- \sum_{k = 0}^{n} \binom{n}{k}p^{k}q^{n-k} \log\binom{n}{k}
+			- p \log p \underbrace{\sum_{k = 0}^{n} k\binom{n}{k}p^{k-1}q^{n-k}}_{\od{}{p}(p+q)^n = n\cdot(p+q)^{n-1}=n}
+			- q \log q\underbrace{\sum_{k = 0}^{n} (n-k)\binom{n}{k}p^{k}q^{n-k-1}}_{\od{}{q}(p+q)^n = n\cdot(p+q)^{n-1}=n}
+		=\\=
+		n \H(p,q) - \sum_{k = 0}^{n} \binom{n}{k}p^{k}q^{n-k} \log\binom{n}{k}  =
+		n \H(p,q) - \sum_{k = 0}^{n} \binom{n}{k}p^{k}q^{n-k} \log\binom{n}{k}
+	\end{multline*}
+\end{solution}
+\begin{exercise}
+	Пусть $\xi_1, \ldots, \xi_n$ --- независимые случайные величины, принимающие значения на множестве $\set{1, \ldots, k}$ с вероятностями $p_1, \ldots, p_k$ соответственно. Обозначим за $\eta_{r} = \# i \text{ таких что } \xi_i = r$. Найдите энтропию 
+	$$
+		\H_m(\eta_1, \ldots, \eta_r)
+	$$
+\end{exercise}
+\begin{exercise}
+	Пусть $n, k \in \N$, $n \geq k$; Тогда для всех $m > 1$:
+	\[
+		\log_m\binom{n}{k} \leq n \cdot \H_m(\frac{k}{n})
+	\]
+\end{exercise}
+\begin{exercise}
+	Пусть $n \in \N$. Тогда для всех $k \leq \floor{\frac{n}{2}}$ и всех $m > 1$:
+	\[
+		\sum_{i = 0}^{k}\binom{n}{i} \leq m^{n\H_m(\frac{k}{n})}
+	\]
+\end{exercise}
+\begin{exercise}
+	Имеется $n$ монет и одна фальшивая (легче остальных). Имеются также чашечные весы без гирь. Какое минимальное число	взвешиваний потребуется, чтобы обнаружить фальшивую монету?
+\end{exercise}
+\begin{exercise}[Неравенство обработки]
+	Пусть $\xi \to \eta \to \zeta$ случайные величины, обладающие марковским свойством. Иначе говоря:
+	$$
+		\forall x_1, y_1, z_1 \ \P(\eta = y_1, \xi = x_1) > 0 \Rightarrow \P(\zeta = z_1 | \eta = y_1, \xi = x_1) = \P(\zeta = z_1 | \eta = y_1)
+	$$
+	Докажите что $\I(\xi; \eta) \geq \I(\xi; \zeta)$.
+\end{exercise}
+
+% Взвешивание с тремя исходами
+
+% Граница Хемминга
+%\begin{proposition}
+%	Граница Хемминга
+%\end{proposition}
+
+% Лучшая оценка
+\end{document}

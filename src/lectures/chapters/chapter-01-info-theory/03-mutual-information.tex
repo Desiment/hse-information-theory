@@ -1,0 +1,330 @@
+% !TeX root = ../../notes.tex
+% !TeX spellcheck = ru-RU
+% !TeX encoding = UTF-8 Unicode
+% !BIB program = biber
+% LTeX: language=ru-RU
+% LTeX: enablePickyRules=true
+%
+% Copyright (c) 2026 Михаил Михайлов
+%
+% This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+% International License. To view a copy of this license, visit:
+% http://creativecommons.org/licenses/by-nc-sa/4.0/
+%
+% You are free to:
+%   Share - copy and redistribute the material in any medium or format
+%   Adapt - remix, transform, and build upon the material
+%
+% Under the following terms:
+%   Attribution - You must give appropriate credit, provide a link to the license,
+%                 and indicate if changes were made.
+%   NonCommercial - You may not use the material for commercial purposes.
+%   ShareAlike - If you remix, transform, or build upon the material, you must
+%                distribute your contributions under the same license as the original.
+%
+% See the LICENSE file in the repository root for full license text.
+
+\section{Взаимная информация}
+\localtableofcontents
+
+\subsection{Взаимная информация}
+
+\begin{definition}
+	Пусть \(\mathcal{A}\) и \(\mathcal{B}\) --- два опыта. Взаимная информация \(\I_m(\mathcal{A};\mathcal{B})\) между опытами $\mathcal{A}$ и $\mathcal{B}$ определяется как
+	\[
+    	\I_m(\mathcal{A};\mathcal{B}) = \H_m(\mathcal{A}) + \H_m(\mathcal{B}) - \H_m(\mathcal{A},\mathcal{B}).
+	\]
+\end{definition}
+
+\begin{remark}
+	Эквивалентно, используя правило цепочки можно расписать взаимную информацию как:
+	\[
+		\I_m(\mathcal{A}; \mathcal{B}) = \H_m(\mathcal{A}) - \H_m(\mathcal{A} | \mathcal{B}) = \H_m(\mathcal{B}) - \H_m(\mathcal{B} | \mathcal{A}).
+	\]
+	Графически это можно представлять в виде мнемоники изображенной на \picref{fig:mutual-information-venne-diagram}.
+
+	\begin{figure}[h!]
+	\centering
+	\begin{tikzpicture}[scale=0.8]
+		\draw[fill=blue, draw=blue, fill opacity = 0.2, thick] (0,0) circle (2cm);
+		\draw[fill=red, draw=red, fill opacity = 0.2, thick] (2,0) circle (2cm);
+		\node at (-1,0) {$\H(\mathcal{A} | \mathcal{B})$};
+		\node at (-0.75,2.25) {$\H(\mathcal{A})$};
+		\node at (3,0) {$\H(\mathcal{B} | \mathcal{A})$};
+		\node at (2.75,2.25) {$\H(\mathcal{B})$};
+		\node at (1,0) {$\I(\mathcal{A};\mathcal{B})$};
+		\node at (1,-2.5) {$\H(\mathcal{A},\mathcal{B})$};
+		\draw[<->] (0.25,0.5) -- (1.75,0.5);
+	\end{tikzpicture}
+	\caption{Представление взаимной информации через круги Эйлера}
+	\label{fig:mutual-information-venne-diagram}
+	\end{figure}
+
+	Взаимную информацию можно мыслить как меру того, сколько знание результата одного опыта уменьшает энтропию другого опыта в среднем (поскольку $\H_m(\mathcal{B} | \mathcal{A})$ это усредненное по результатам опыта $\mathcal{A}$ значение энтропии опыта $\mathcal{B}$ при условии известного результата $\mathcal{A}$).
+\end{remark}
+
+
+\begin{proposition}[Свойства взаимной информации]
+	Для любых двух опытов $\mathcal{A}$ и $\mathcal{B}$	
+	\begin{enumerate}[compact]
+    	\item \(\I_m(\mathcal{A};\mathcal{B}) = \I_m(\mathcal{B};\mathcal{A})\).
+		\item \(0 \leq \I_m(\mathcal{A};\mathcal{B}) \leq \min\set{\H_m(\mathcal{A}), \H_m(\mathcal{B})}\), причем:
+			\begin{itemize}[compact]
+				\item равенство $\I_m(\mathcal{A};\mathcal{B}) = 0$ достигается тогда и только тогда, когда опыты $\mathcal{A}$ и $\mathcal{B}$ независимы; 
+				\item равенство $\I_m(\mathcal{A};\mathcal{B}) = \H_m(\mathcal{A})$ достигается тогда и только тогда, когда опыт $\mathcal{B}$ определяет опыт $\mathcal{A}$.
+			\end{itemize}
+	\end{enumerate}
+\end{proposition}
+\begin{proof}
+	Не умаляя общности $m=2$. 
+	\begin{enumerate}
+		\item Симметричность очевидна из определения.
+		
+		\item Неотрицательность. По определению $\I(\mathcal{A};\mathcal{B}) = \H(\mathcal{A}) - \H(\mathcal{A}|\mathcal{B})$. 
+			Из предложения \ref{prop:conditional-entropy-estimates} имеем $\H(\mathcal{A}|\mathcal{B}) \leq \H(\mathcal{A})$, причем равенство достигается тогда и только тогда, когда опыты $\mathcal{A}$ и $\mathcal{B}$ независимы. Следовательно, $\I(\mathcal{A};\mathcal{B}) \geq 0$, и $\I(\mathcal{A};\mathcal{B}) = 0$ тогда и только тогда, когда $\mathcal{A}$ и $\mathcal{B}$ независимы.
+		
+		\item Оценка минимумом из энтропий. Из правила цепочки $\I(\mathcal{A};\mathcal{B}) = \H(\mathcal{A}) - \H(\mathcal{A}|\mathcal{B}) \leq \H(\mathcal{A})$, так как $\H(\mathcal{A}|\mathcal{B}) \geq 0$. Аналогично, $\I(\mathcal{A};\mathcal{B}) \leq \H(\mathcal{B})$. Таким образом, $\I(\mathcal{A};\mathcal{B}) \leq \min\{\H(\mathcal{A}), \H(\mathcal{B})\}$. Равенство $\I(\mathcal{A};\mathcal{B}) = \H(\mathcal{A})$ достигается тогда и только тогда, когда $\H(\mathcal{A}|\mathcal{B}) = 0$, что по предложению \ref{prop:conditional-entropy-estimates} эквивалентно тому, что опыт $\mathcal{B}$ определяет опыт $\mathcal{A}$.
+	\end{enumerate}
+\end{proof}
+
+\begin{example}[Сумма двух четырехгранных костей]
+	Предположим что бросается две четырехгранные кости. Рассмотрим два опыта: $\mathcal{A}$ --- наблюдается значение на первой кости (состоит из событий $\{\textit{Выпало 1}, \ldots, \textit{Выпало 4}\}$), $\mathcal{B}$ --- наблюдается сумма выпавших значений ($\mathcal{B} = \set{\set{S = 2}, \ldots, \set{S = 8}}$). В предположении, что кости честные, имеем $\H(\mathcal{A}) = \log_2 4 = 2$ бита (энтропия опыта, результаты которого равновероятны). Условная энтропия $\H(\mathcal{B} | \mathcal{A})$ также равна двум битам: при фиксированном значении на первой грани, сумма равномерно распределена на 4 значениях, поэтому $\H(\mathcal{B}|\mathcal{A}) = 2$ бита. Вычислим $\H(\mathcal{B})$ непосредственно. Распределение суммы $S$:
+	\[
+		\P(S=2) = \frac{1}{16},\; \P(S=3) = \frac{2}{16},\; \P(S=4) = \frac{3}{16},\; \P(S=5) = \frac{4}{16},\;
+		\P(S=6) = \frac{3}{16},\; \P(S=7) = \frac{2}{16},\; \P(S=8) = \frac{1}{16}.
+	\]
+	Значит
+	\[
+		\H(\mathcal{B}) = - \sum_{k = 2}^{8}\P(S = k)\log\P(S = k) = -\frac{2 \cdot 1}{16}\log_2\frac{1}{16} - \frac{2 \cdot 2}{16}\log_2\frac{2}{16} - \frac{2 \cdot 3}{16}\log_2\frac{3}{16} - \frac{1 \cdot 4}{16}\log_2\frac{4}{16}  \approx 2.656 \text{ бита}.
+	\]
+	Таким образом,
+	\[
+		\I(\mathcal{A};\mathcal{B}) = \H(\mathcal{B}) - \H(\mathcal{B} | \mathcal{A}) = 2.656 - 2 = 0.656 \text{ бита}.
+	\]
+	Заметим, что $\I(\mathcal{A};\mathcal{B}) < \H(\mathcal{A})$, так как знание суммы не полностью определяет значение первого кубика.
+\end{example}
+
+\subsection{Условная взаимная информация}
+
+\begin{notation}
+	$\I(\mathcal{A}_1, \ldots, \mathcal{A}_r; \mathcal{B}_1, \ldots, \mathcal{B}_s) = \I(\mathcal{A}_1 \land \ldots \land \mathcal{A}_r; \mathcal{B}_1 \land \ldots \land \mathcal{B}_s)$
+\end{notation}
+
+\begin{definition}
+	Условная взаимная информация между опытами $\mathcal{A}$ и $\mathcal{B}$ при условии опыта $\mathcal{C}$ определяется как
+	\[
+		\I_m(\mathcal{A};\mathcal{B} | \mathcal{C}) = \H_m(\mathcal{A} | \mathcal{C}) + \H_m(\mathcal{B} | \mathcal{C}) - \H_m(\mathcal{A},\mathcal{B} | \mathcal{C}).
+	\]
+\end{definition}
+
+\begin{remark}
+	Из определения и правила цепочки для условной энтропии получаем эквивалентные формы:
+	\[
+		\I_m(\mathcal{A}; \mathcal{B} | \mathcal{C}) = \H_m(\mathcal{A} | \mathcal{C}) - \H_m(\mathcal{A} | \mathcal{B}, \mathcal{C}) = \H_m(\mathcal{B} | \mathcal{C}) - \H_m(\mathcal{B} | \mathcal{A}, \mathcal{C}).
+	\]
+\end{remark}
+
+% NOTE: Не доказывалось на лекциях, не включать в экзамен
+\begin{proposition}[Свойства условной взаимной информации]
+	Для любых трёх опытов $\mathcal{A}, \mathcal{B}, \mathcal{C}$:
+	\begin{itemize}[nosep]
+    	\item \(\I_m(\mathcal{A};\mathcal{B} | \mathcal{C}) \ge 0\).
+    	\item \(\I_m(\mathcal{A};\mathcal{B}\mid\mathcal{C}) = \I_m(\mathcal{B};\mathcal{A}\mid\mathcal{C})\).
+	\end{itemize}
+\end{proposition}
+\begin{proof}
+	Не умаляя общности $m = 2$.	Симметричность очевидна из определения. Для доказательства неотрицательности запишем:
+	\[
+		\I(\mathcal{A};\mathcal{B}|\mathcal{C}) = \H(\mathcal{A}|\mathcal{C}) - \H(\mathcal{A}|\mathcal{B},\mathcal{C}).
+	\]
+	Покажем, что $\H(\mathcal{A}|\mathcal{B},\mathcal{C}) \leq \H(\mathcal{A}|\mathcal{C})$. Пусть $\mathcal{A} = \set{A_1, \ldots, A_{n_a}}, \mathcal{B} = \set{B_1, \ldots, B_{n_b}}, \mathcal{C} = \set{C_1, \ldots, C_{n_c}}$. Распишем разность используя то что $\P(B_{i_b}, C_{i_c}) = \P(C_{i_c}) \cdot \P(B_{i_b} | C_{i_c})$:
+	\begin{multline*}
+		\I(\mathcal{A};\mathcal{B}|\mathcal{C}) 
+		= \H(\mathcal{A}|\mathcal{C}) - \H(\mathcal{A}|\mathcal{B},\mathcal{C}) 
+		=\\=
+		-\sum_{i_c = 1}^{n_c}\P(C_{i_c}) \sum_{i_a = 1}^{n_a}\P(A_{i_a} | C_{i_c}) \log \P(A_{i_a} | C_{i_c}) + \sum_{i_c = 1}^{n_c}\sum_{i_b = 1}^{n_b} \P(B_{i_b}, C_{i_c}) \sum_{i_a = 1}^{n_a}\P(A_{i_a} | B_{i_b}, C_{i_c}) \log \P(A_{i_a} | B_{i_b}, C_{i_c})
+		=\\=
+		-\sum_{i_c = 1}^{n_c}\P(C_{i_c}) \left[\sum_{i_a = 1}^{n_a}\P(A_{i_a} | C_{i_c}) \log \P(A_{i_a} | C_{i_c}) - \sum_{i_c = 1}^{n_c}\sum_{i_b = 1}^{n_b} \P(B_{i_b} | C_{i_c}) \sum_{i_a = 1}^{n_a}\P(A_{i_a} | B_{i_b}, C_{i_c}) \log \P(A_{i_a} | B_{i_b}, C_{i_c})\right]
+	\end{multline*}
+	Далее, аналогично доказательству предложения \ref{prop:conditional-entropy-chain-rule}, положим $\P_{i_c}(\cdot) = \P(\cdot | C_{i_c})$. Тогда:
+	\[
+		\I(\mathcal{A};\mathcal{B}|\mathcal{C}) 
+		=
+		-\sum_{i_c = 1}^{n_c}\P(C_{i_c}) \Bigg[\overbrace{\sum_{i_a = 1}^{n_a}\P_{i_c}(A_{i_a}) \log \P_{i_c}(A_{i_a})}^{-\H(\mathcal{A}) \text{ относительно } \P_{i_c}} - \overbrace{\sum_{i_c = 1}^{n_c}\sum_{i_b = 1}^{n_b} \P_{i_c}(B_{i_b}) \sum_{i_a = 1}^{n_a}\P_{i_c}(A_{i_a} | B_{i_b}) \log \P_{i_c}(A_{i_a} | B_{i_b})}^{-\H(\mathcal{A} | \mathcal{B}) \text{ относительно } \P_{i_c}}\Bigg] \geq 0
+	\]	
+\end{proof}
+
+\begin{remark}
+	В отличие от условной энтропии, которая всегда меньше безусловной (information does not hurt), условная взаимная информация может быть меньше, а может быть больше взаимной информации. 
+\end{remark}
+
+\begin{example}[Условная взаимная информация может быть больше безусловной]
+	Пусть опыты $\mathcal{A}_1 = \set{O_1, P_1}, \mathcal{A}_2 = \set{O_2, P_2}$ суть независимые броски честной монеты. Рассмотрим также еще опыт состоящий в наблюдении того, выпало ли на монетках одно и то же значение, или нет 
+	$$
+	\mathcal{C} = \set{\textit{Броски дали одинаковый результат}, \textit{Броски дали разный результат}}.
+	$$  
+	Иначе можно записать $\mathcal{C} = \set{(O_1 \cap O_2) \cup (P_1 \cap P_2), (O_1 \cap P_2) \cup (P_1 \cap O_2)}$. Обратим внимание, что сами броски при этом в опыте $\mathcal{C}$ не наблюдаются. Тогда:
+	\[
+		\I(\mathcal{A}_1; \mathcal{A}_2) = 0 \quad \text{(в силу независимости опытов $\mathcal{A}_1$ и $\mathcal{A}_2$)}.
+	\]
+	Вычислим условную информацию $\I(\mathcal{A}_1; \mathcal{A}_2 | \mathcal{C})$. Поймем, что знание результата опыта $\mathcal{C}$ вместе с результатом одного из бросков (скажем знание результата опыта $\mathcal{A}_1$) полностью определяет результат другого броска. Таким образом, имеем что $\H(\mathcal{A}_2 | \mathcal{A}_1, \mathcal{C}) = 0$. С другой стороны
+	\begin{align*}
+		& \P(O_2 | \textit{Броски дали одинаковый результат}) = \P(O_2) && \P(P_2 | \textit{Броски дали одинаковый результат}) = \P(P_2) \\
+		& \P(O_2 | \textit{Броски дали разный результат}) = \P(O_2) && \P(P_2 | \textit{Броски дали разный результат}) = \P(P_2) 
+	\end{align*}
+	И значит опыты $\mathcal{A}_2$ и $\mathcal{C}$ независимы. Следовательно, $\H(\mathcal{A}_2 | \mathcal{C}) = \H(\mathcal{A}_2) = 1$ бит. Но тогда: 
+	\[
+		\I(\mathcal{A}_1; \mathcal{A}_2 | \mathcal{C}) = \H(\mathcal{A}_2 | \mathcal{C}) - \H(\mathcal{A}_2 | \mathcal{A}_1, \mathcal{C}) = 1 - 0 = 1 \text{ бит}.
+	\]
+	Получили $\I(\mathcal{A}_1; \mathcal{A}_2) = 0 < 1 = \I(\mathcal{A}_1; \mathcal{A}_2 | \mathcal{C})$. Условная взаимная информация превосходит безусловную информацию.
+\end{example}
+
+\begin{example}[Условная взаимная информация может быть меньше безусловной]
+	Пусть теперь вместо двух бросков честной монеты, мы делаем выбор наугад между фальшивой и настоящей, честной, монетой (как в примерах ранее), после чего подбрасываем такую монету два раза. Будем считать, что фальшивая монета всегда выпадает орлом. Опыт $\mathcal{B}$  будет состоять в раскрытии того, какая монета была вытащена, настоящая или фальшивая $\mathcal{B} = \set{\text{Н}, \text{Ф}}$. В свою очередь опыты $\mathcal{A}_1 = \set{O_1, P_1}, \mathcal{A}_2 = \set{O_2, P_2}$, как и ранее, состоят в двух бросках выбранной монеты. Вычислим взаимную информацию $\I(\mathcal{A}_1; \mathcal{A}_2)$ --- она будет больше нуля, так как опыты $\mathcal{A}_1$ и $\mathcal{A}_2$ зависимы. Для этого посчитаем:
+	\[
+		\H(\mathcal{A}_i) = -\P(O_i)\log\P(O_i) - \P(P_i)\log\P(P_i) \\
+	\]
+	Полные вероятности $\P(O_i), \P(P_i), i = 1, 2$ можно вычислить из формулы полной вероятности:
+	\begin{align*}
+		&\P(O_i) = \P(O_i | \text{Ф}) \cdot \P(\text{Ф}) +  \P(O_i | \text{Н}) \cdot \P(\text{Н}) = 1 \cdot \frac{1}{2} + \frac{1}{2} \cdot \frac{1}{2} = \frac{3}{4}\\
+		&\P(P_i) = \P(P_i | \text{Ф}) \cdot \P(\text{Ф}) +  \P(P_i | \text{Н}) \cdot \P(\text{Н}) = 0 \cdot \frac{1}{2} + \frac{1}{2} \cdot \frac{1}{2} = \frac{1}{4}
+	\end{align*}
+	И значит $\H(\mathcal{A}_1) = \H(\mathcal{A}_2) = 2 - \frac{3}{4} \cdot \log 3 \approx 0.81$ бит. Вычислим теперь $\H(\mathcal{A}_1, \mathcal{A}_2)$, для этого надо вычислить совместные вероятности. Аналогично, применяя формулу полной вероятности, получаем
+	\begin{align*}
+		&\P(O_1, O_2) = \frac{1}{4} \cdot \frac{1}{2} + 1 \cdot \frac{1}{2} = \frac{5}{8} 
+		&&\P(P_1, O_2) = \frac{1}{4} \cdot \frac{1}{2} + 0 \cdot \frac{1}{2} = \frac{1}{8} \\
+		&\P(O_1, P_2) = \frac{1}{4} \cdot \frac{1}{2} + 0 \cdot \frac{1}{2} = \frac{1}{8} 
+		&&\P(P_1, P_2) = \frac{1}{4} \cdot \frac{1}{2} + 0 \cdot \frac{1}{2} = \frac{1}{8} 
+	\end{align*}
+	Откуда $\H(\mathcal{A}_1, \mathcal{A}_2) = 3 - \frac{5}{8}\log 5 \approx 1.55$ бит. Значит:
+	\[
+		\I(\mathcal{A}_1; \mathcal{A}_2) = \H(\mathcal{A}_1) + \H(\mathcal{A}_2) - \H(\mathcal{A}_1; \mathcal{A}_2) \approx 0.07 \text{ бит}
+	\]
+	Покажем что $\I(\mathcal{A}_1; \mathcal{A}_2 | \mathcal{B}) = 0$. Мы имеем:
+	\begin{align*}
+		& \P(O_2 | O_1, \text{Ф}) = \P(O_2 | \text{Ф}) = 1 
+		&& \P(P_2 | O_1, \text{Ф}) = \P(P_2 | \text{Ф}) = 0 \\
+		& \P(O_2 | O_1, \text{Н}) = \P(O_2 | \text{Н}) = 0.5 
+		&& \P(P_2 | O_1, \text{Н}) = \P(P_2 | \text{Н}) = 0.5
+	\end{align*}
+	Можно убедиться, что $\H(\mathcal{A}_2 | \mathcal{B}, \mathcal{A}_1) = \H(\mathcal{A}_2 | \mathcal{B})$ (разные скобки в выражении ниже носят только визуальный характер).
+	\begin{align*}
+		\H(\mathcal{A}_2 | \mathcal{B}, \mathcal{A}_1) =&- \P(O_1, \text{Ф}) \Big[\P(O_2 | O_1, \text{Ф})\log \P(O_2 | O_1, \text{Ф}) + \P(P_2 | O_1, \text{Ф})\log \P(P_2 | O_1, \text{Ф})\Big] \\
+														&- \P(O_1, \text{Ч}) \Big\{\P(O_2 | O_1, \text{Ч})\log \P(O_2 | O_1, \text{Ч}) + \P(P_2 | O_1, \text{Ч})\log \P(P_2 | O_1, \text{Ф})\Big\} \\
+														&- \P(P_1, \text{Ф}) \Big[\P(O_2 | P_1, \text{Ф})\log \P(O_2 | P_1, \text{Ф}) + \P(P_2 | P_1, \text{Ф})\log \P(P_2 | P_1, \text{Ф})\Big] \\
+														&- \P(P_1, \text{Ч}) \Big\{\P(O_2 | P_1, \text{Ч})\log \P(O_2 | P_1, \text{Ч}) + \P(P_2 | P_1, \text{Ч})\log \P(P_2 | P_1, \text{Ф})\Big\} =\\
+		= & -\Big(\underset{\P(\text{Ф})}{\P(O_1, \text{Ф}) + \P(P_1, \text{Ф})}\Big) \cdot \Big[\P(O_2 | \text{Ф})\log \P(O_2 | \text{Ф}) + \P(P_2 | \text{Ф})\log \P(P_2 | \text{Ф})\Big] \\
+		  & -\Big(\underset{\P(\text{Ч})}{\P(O_1, \text{Ч}) + \P(P_1, \text{Ч})}\Big) \cdot \Big\{\P(O_2 | \text{Ч})\log \P(O_2 | \text{Ч}) + \P(P_2 | \text{Ч})\log \P(P_2 | \text{Ч})\Big\} = \H(\mathcal{A}_2 | \mathcal{B})
+	\end{align*}
+	Значит $\I(\mathcal{A}_1; \mathcal{A}_2 | \mathcal{B}) = 0 < \I(\mathcal{A}_1; \mathcal{A}_2)$.
+\end{example}
+
+\begin{proposition}[Правило цепочки для взаимной информации]
+	\[
+		\I_m(\mathcal{A}_1, \ldots, \mathcal{A}_n ; \mathcal{B}) = \sum_{i = 1}^n \I_m(\mathcal{A}_i; \mathcal{B} | \mathcal{A}_{i-1}, \ldots, \mathcal{A}_1).
+	\]
+\end{proposition}
+\begin{proof}
+	Не умаляя общности $m = 2$. Имеем:
+	\begin{align*}
+		\I(\mathcal{A}_1, \ldots, \mathcal{A}_n; \mathcal{B}) 
+		&= \H(\mathcal{A}_1, \ldots, \mathcal{A}_n) - \H(\mathcal{A}_1, \ldots, \mathcal{A}_n | \mathcal{B}) \\
+		&= \left[ \sum_{i=1}^n \H(\mathcal{A}_i | \mathcal{A}_{i-1}, \ldots, \mathcal{A}_1) \right] - \left[ \sum_{i=1}^n \H(\mathcal{A}_i | \mathcal{B}, \mathcal{A}_{i-1}, \ldots, \mathcal{A}_1) \right] \\
+		&= \sum_{i=1}^n \left[ \H(\mathcal{A}_i | \mathcal{A}_{i-1}, \ldots, \mathcal{A}_1) - \H(\mathcal{A}_i | \mathcal{B}, \mathcal{A}_{i-1}, \ldots, \mathcal{A}_1) \right] \\
+		&= \sum_{i=1}^n \I(\mathcal{A}_i; \mathcal{B} | \mathcal{A}_{i-1}, \ldots, \mathcal{A}_1).
+	\end{align*}
+	
+	Первый переход использует определение взаимной информации через разность энтропий. Второй переход применяет правило цепочки для безусловной и условной энтропии (следствия \ref{cor:long-chain-rule-entropy} и \ref{cor:long-chain-rule-conditional-entropy}). Третий --- перегруппировка сумм. Четвертый --- определение условной взаимной информации.
+\end{proof}
+
+\subsection{Информация взаимодействия}
+
+\begin{definition}[Информация взаимодействия]
+	Для трёх опытов $\mathcal{A}$, $\mathcal{B}$, $\mathcal{C}$ информация взаимодействия (или взаимная информация трёх величин) определяется как
+	\[
+		\I_m(\mathcal{A}; \mathcal{B}; \mathcal{C}) = \I_m(\mathcal{A}; \mathcal{B}) - \I_m(\mathcal{A}; \mathcal{B} | \mathcal{C}).
+	\]
+\end{definition}
+
+\begin{proposition}[Симметричное выражение]
+	Для трёх опытов $\mathcal{A},\mathcal{B},\mathcal{C}$ информация взаимодействия может быть выражена через энтропии по формуле включения-исключения:
+	\[
+		\I_m(\mathcal{A};\mathcal{B};\mathcal{C}) = \H_m(\mathcal{A}) + \H_m(\mathcal{B}) + \H_m(\mathcal{C}) - \H_m(\mathcal{A},\mathcal{B}) - \H_m(\mathcal{A},\mathcal{C}) - \H_m(\mathcal{B},\mathcal{C}) + \H_m(\mathcal{A},\mathcal{B},\mathcal{C}).
+	\]
+\end{proposition}
+\begin{proof}
+	Не умаляя общности $m = 2$. По определению:	
+	\begin{align*}
+		\I(\mathcal{A};\mathcal{B}) - \I(\mathcal{A};\mathcal{B}|\mathcal{C}) 
+		&= [\H(\mathcal{A}) - \H(\mathcal{A}|\mathcal{B})] - [\H(\mathcal{A}|\mathcal{C}) - \H(\mathcal{A}|\mathcal{B},\mathcal{C})] =\\
+		&= \H(\mathcal{A}) - \H(\mathcal{A}|\mathcal{B}) - \H(\mathcal{A}|\mathcal{C}) + \H(\mathcal{A}|\mathcal{B},\mathcal{C}).
+	\end{align*}
+	Выразим все условные энтропии через совместные, используя правило цепочки:
+	\[
+		\H(\mathcal{A}|\mathcal{B}) = \H(\mathcal{A},\mathcal{B}) - \H(\mathcal{B}),\quad
+		\H(\mathcal{A}|\mathcal{C}) = \H(\mathcal{A},\mathcal{C}) - \H(\mathcal{C}),\quad
+		\H(\mathcal{A}|\mathcal{B},\mathcal{C}) = \H(\mathcal{A},\mathcal{B},\mathcal{C}) - \H(\mathcal{B},\mathcal{C}).
+	\]
+	Подставим:
+	\begin{align*}
+		\I(\mathcal{A};\mathcal{B}) - \I(\mathcal{A};\mathcal{B}|\mathcal{C}) &= \H(\mathcal{A}) - [\H(\mathcal{A},\mathcal{B}) - \H(\mathcal{B})] - [\H(\mathcal{A},\mathcal{C}) - \H(\mathcal{C})] + [\H(\mathcal{A},\mathcal{B},\mathcal{C}) - \H(\mathcal{B},\mathcal{C})] =\\
+		&= \H(\mathcal{A}) + \H(\mathcal{B}) + \H(\mathcal{C}) - \H(\mathcal{A},\mathcal{B}) - \H(\mathcal{A},\mathcal{C}) - \H(\mathcal{B},\mathcal{C}) + \H(\mathcal{A},\mathcal{B},\mathcal{C}).
+	\end{align*}
+	Что и требовалось доказать.
+\end{proof}
+
+\begin{corollary}[Симметричность]
+	Информация взаимодействия симметрична относительно перестановки аргументов:
+	\[
+		\I_m(\mathcal{A};\mathcal{B};\mathcal{C}) = \I_m(\mathcal{A};\mathcal{C};\mathcal{B}) = \I_m(\mathcal{B};\mathcal{A};\mathcal{C}) 
+		= \I_m(\mathcal{B};\mathcal{C};\mathcal{A}) = \I_m(\mathcal{C};\mathcal{A};\mathcal{B}) = \I_m(\mathcal{C};\mathcal{B};\mathcal{A}).
+	\]
+\end{corollary}
+\begin{proof}
+	Непосредственно следует из симметричности выражения через совместные энтропии, которое инвариантно относительно перестановок $\mathcal{A}, \mathcal{B}, \mathcal{C}$.
+\end{proof}
+
+\begin{proposition}[Границы информации взаимодействия]
+	\label{prop:interaction-information-bound}
+	Для любых трёх опытов $\mathcal{A}, \mathcal{B}, \mathcal{C}$:
+	\[
+		-\min\{\I_m(\mathcal{A};\mathcal{B} | \mathcal{C}), \I_m(\mathcal{A};\mathcal{C} | \mathcal{B}), \I_m(\mathcal{B};\mathcal{C} | \mathcal{A})\} \leq \I_m(\mathcal{A};\mathcal{B};\mathcal{C}) \leq \min\{\I_m(\mathcal{A};\mathcal{B}), \I_m(\mathcal{A};\mathcal{C}), \I_m(\mathcal{B};\mathcal{C})\}.
+	\]
+\end{proposition}
+\begin{proof}
+	Не умаляя общности $m = 2$. Имеем из определения, что $-\I(\mathcal{A};\mathcal{B} | \mathcal{C}) \leq \I(\mathcal{A};\mathcal{B};\mathcal{C}) \leq \I(\mathcal{A};\mathcal{B})$. В силу симметричности получаем остальные неравенства, откуда следует искомое.
+\end{proof}
+\begin{remark}
+	Неравенства точные: границы достигаются в примерах из предыдущей подсекции.
+\end{remark}
+\newpage
+
+\begin{remark}
+	Границы в предложении \ref{prop:interaction-information-bound} точны, достаточно рассмотреть примеры про броски монеты из предыдущей подсекции. В частности, информация взаимодействия \textbf{может быть отрицательной}. При этом довольно часто, информацию взаимодействия представляют с помощью кругов Эйлера, см. \picref{fig:interaction-info}; однако, такое представление может запутать, и создать впечатление что $\I(\mathcal{A}; \mathcal{B};\mathcal{C}) \geq 0$, что вовсе не обязательно.
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}[scale=0.8]
+	\draw[fill=blue, draw=blue, fill opacity = 0.2, thick] (0,0) circle (3cm);
+	\draw[fill=red, draw=red, fill opacity = 0.2, thick] (3,0) circle (3cm);
+	\draw[fill=yellow, draw=yellow, fill opacity = 0.2, thick] (1.5,2.25) circle (3cm);
+	\node at (-3,-2.0) {$\H(\mathcal{A})$};
+	\node at (6,-2.0) {$\H(\mathcal{B})$};
+	\node at (1.5,5.75) {$\H(\mathcal{C})$};
+	\node at (1.5,0.3) {$\I(\mathcal{A};\mathcal{B};\mathcal{C})$};
+	\node at (1.5,-1.25) {$\I(\mathcal{A};\mathcal{B} | \mathcal{C})$};
+\end{tikzpicture}
+\caption{Информация взаимодействия $\mathcal{I}(\mathcal{A}; \mathcal{B})$}
+\label{fig:interaction-info}
+\end{figure}
+\end{remark}
+
+\begin{remark}
+	Информация взаимодействия измеряет влияние опыта $\mathcal{C}$ на взаимную информацию между $\mathcal{A}$ и $\mathcal{B}$:
+	\begin{itemize}
+		\item $\I(\mathcal{A};\mathcal{B};\mathcal{C}) = 0$: $\mathcal{C}$ не влияет на взаимную информацию;
+		\item $\I(\mathcal{A};\mathcal{B};\mathcal{C}) > 0$: знание $\mathcal{C}$ в среднем уменьшает взаимную информацию между $\mathcal{A}$ и $\mathcal{B}$ (часть общих сведений объясняется $\mathcal{C}$);
+		\item $\I(\mathcal{A};\mathcal{B};\mathcal{C}) < 0$: знание $\mathcal{C}$ в среднем увеличивает взаимную информацию между $\mathcal{A}$ и $\mathcal{B}$ (обнаруживает скрытую зависимость).
+	\end{itemize}
+\end{remark}
+

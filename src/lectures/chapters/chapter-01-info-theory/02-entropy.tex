@@ -400,7 +400,7 @@
 	Так как равенство выполнено для любых наборов событий $(A_1, \ldots, A_k)$ из разных опытов, то в частности выполнено для любого поднабора.
 \end{remark}
 \begin{example}
-	Пусть честная монетка независимо бросается $r$ раз. Обозначим за $O_i$($P_i$), $i = 1, \ldots r$ событие \enquote{\textit{при $i$-ом броске выпал(а) орёл (решка)}}. Рассмотрим следующие опыты:
+	Пусть честная монетка независимо бросается $r$ раз. Обозначим за $O_i$ (соотв. $P_i$), $i = 1, \ldots r$ событие \enquote{\textit{при $i$-ом броске выпал(а) орёл (решка)}}. Рассмотрим следующие опыты:
 	\begin{align*}
 		&\mathcal{A}_i = \set{O_i, P_i},\quad i = 1, \ldots, r \\
 		&\mathcal{A}_0 = \set{T_0, T_1},\quad \text{$T_0$ --- число выпавших орлов чётно, $T_1$ --- нечетно}
@@ -465,7 +465,7 @@
 \begin{example}[Случайная монета, продолжение - 2]
 	Можем убедиться, рассматривая модель, где выбор между настоящей и фальшивой монетой делается наугад. Как и ранее, рассматриваем два опыта: первый состоит в наблюдении того, какая была вытащена монета: $\mathcal{B} = \set{\text{Н}, \text{Ф}}$. Второй состоит в наблюдении первого броска монеты и также имеет два результата, $\mathcal{A}_1 = \set{O_1, P_1}$. 
 
-	По примеру ранее $\H(\mathcal{A}_1 | \mathcal{B}) = 1.5\text{ бит}$. Энтропия $\H(\mathcal{B}) = 1 \text{ бит}$. Посчитаем:
+	По примеру ранее $\H(\mathcal{A}_1, \mathcal{B}) = 1.5\text{ бит}$. Энтропия $\H(\mathcal{B}) = 1 \text{ бит}$. Посчитаем:
 	\[
 		\H(\mathcal{A}_1 | \mathcal{B}) = - \P(\text{Н}) \cdot \underbrace{\big[\P(O_1 | \text{Н})\log\P(O_1 | \text{Н}) + \P(P_1 | \text{Н})\log\P(P_1 | \text{Н})\big]}_{1 \text{ бит}} - \P(\text{Ф}) \cdot \underbrace{\P(P_1 | \text{Ф})\log\P(P_1 | \text{Ф})}_{0 \text{ бит}} = \frac{1}{2} \cdot 1 + \frac{1}{2} \cdot 0 = 0.5 \text{ бит}
 	\]
@@ -492,6 +492,7 @@
 	Случаи равенства разбираются исходя из случаев равенства оценок в предложении \ref{prop:conditional-entropy-estimates}.
 \end{proof}
 \begin{Theorem}[О значениях совместной энтропии]
+	\label{th:joint-entrop-bound}
     Для любых опытов $\mathcal{A}_1, \ldots, \mathcal{A}_{r}$:
 	\[
 		\max_{j = 1,\ldots,r} \H_m(\mathcal{A}_j) \leq \H_m(\mathcal{A}_1, \ldots \mathcal{A}_r) \leq \sum_{j = 1}^{r}\H_m(\mathcal{A}_j)
@@ -561,9 +562,102 @@
 	 Что и требовалось доказать. В обратную сторону случай равенства напрямую следует из \ref{corollary:joint-entropy-bound}.
 \end{proof}
 
+\subsection{Вариации на тему правила цепочки}
+Заметим что из предложения \ref{prop:entropy-chain-rule} немедленно следует более общее правило цепочки:
+\begin{corollary}
+	\label{cor:long-chain-rule-entropy}
+    Для любых опытов $\mathcal{A}_1, \ldots, \mathcal{A}_{r}$:
+	\[
+		\H_m(\mathcal{A}_1, \ldots, \mathcal{A}_r) = \H_{m}(\mathcal{A}_1) + \sum_{i = 2}^r \H_m(\mathcal{A}_i | \mathcal{A}_{i-1}, \ldots, \mathcal{A}_1)
+	\]
+\end{corollary}
+\begin{remark}
+	Далее для краткости, во всех конструкциях, где фигурирует взятие условия $\,|\,$ принимаем следующее соглашение. Если условие составное и его части пишутся через запятую, то при наличии знака многоточия для перечисления событий по некоторому множеству индексов, то
+	\begin{enumerate}[compact]
+		\item если результирующее множество условий пусто, понимаем это как отсутствие условия. Например, при $i > j$ под выражением $\H(\mathcal{B} | \mathcal{A}_i, \mathcal{A}_{i+1}, \ldots, \mathcal{A}_j)$ понимается $\H(\mathcal{B})$;
+		\item если результирующее множество условий записанных через многоточие пусто, но есть ещё какие-то другие условия, понимаем это как взятие условия по всем, не входящим в запись через многоточие, условиям. Например, при $k = 1$ под выражением $\P(A_{k}| A_{k-1}, \mathcal{A}_{k-2}, \ldots, A_1, B)$ понимается $\P(A_1 | B)$;
+
+	\end{enumerate}
+	В такой нотации правило цепочки для вероятностей $\P(E_1, \ldots, E_r) = \P(E_1) \cdot \P(E_2 | E_1) \cdots \P(E_r | E_{r-1}, \ldots, E_1)$ например будет записываться как 
+	\[
+		\P(E_1, \ldots, E_r) = \prod\limits_{i = 1}^{r} \P(E_{i} | E_{1}, \ldots, E_{i - 1}),
+	\]
+	а условие следствия \ref{cor:long-chain-rule-entropy} может быть записано как:
+	\[
+		\H_m(\mathcal{A}_1, \ldots, \mathcal{A}_r) = \sum_{i = 1}^r \H_m(\mathcal{A}_i | \mathcal{A}_{i-1}, \ldots, \mathcal{A}_1)
+	\]
+\end{remark}
+\begin{proof}[Доказательство следствия \ref{cor:long-chain-rule-entropy}.]
+	Не умаляя общности $m = 2$.  По индукции. Базовый случай рассмотрен в \ref{prop:entropy-chain-rule}. Докажем индукционный переход $r \to r+1$. Рассмотрим:
+	\begin{multline*}
+		\H(\mathcal{A}_1, \ldots, \mathcal{A}_r, \mathcal{A}_{r+1})  
+		\overset{*_2}{=} \H(\mathcal{A}_1, \ldots, \mathcal{A}_r) + \H(\mathcal{A}_{r+1} | \mathcal{A}_1, \ldots, \mathcal{A}_r) = \\
+		\overset{*_r}{=} \sum_{i = 1}^r \H(\mathcal{A}_i | \mathcal{A}_{i-1}, \ldots, \mathcal{A}_1) + \H(\mathcal{A}_{n+1} | \mathcal{A}_1, \ldots, \mathcal{A}_r) 
+		= \sum_{i = 1}^{r+1} \H(\mathcal{A}_i | \mathcal{A}_{i-1}, \ldots, \mathcal{A}_1)
+	\end{multline*}
+	где $*$ означает переход сделанный по предположению индукции.
+\end{proof}
+
+Аналогично предложению \ref{prop:entropy-chain-rule} и следствию \ref{cor:long-chain-rule-entropy} можно сформулировать их \enquote{условные} аналоги. 
+\begin{proposition}
+	Для любых трёх опытов $\mathcal{A}, \mathcal{B}, \mathcal{C}$ выполнено:
+	\label{prop:conditional-entropy-chain-rule}
+	\[
+		\H_m(\mathcal{A}, \mathcal{B} | \mathcal{C}) = \H_m(\mathcal{A} | \mathcal{C}) + \H_m(\mathcal{B} | \mathcal{A}, \mathcal{C})
+	\]
+\end{proposition}
+\begin{proof}
+	Не умаляя общности $m = 2$. Пусть $\mathcal{A} = \set{A_1, \ldots, A_{n_a}}, \mathcal{B} = \set{B_1, \ldots, B_{n_b}}, \mathcal{C} = \set{C_1, \ldots, C_{n_c}}$. Запишем по определению 
+	\[
+		\H(\mathcal{A}, \mathcal{B} | \mathcal{C})
+		= \sum_{i_c = 1}^{n_c}\P(C_{i_c})\sum_{i_a = 1}^{n_a}\sum_{i_b = 1}^{n_b} \P(A_{i_a}, B_{i_b} | C_{i_c}) \log \P(A_{i_a}, B_{i_b} | C_{i_c}).
+	\]
+	Обозначим $\P_{i_c}(\cdot) = \P(\cdot | C_{i_c})$. Тогда:
+	\begin{multline*}
+		\H(\mathcal{A}, \mathcal{B} | \mathcal{C})
+		= -\sum_{i_c = 1}^{n_c}\P(C_{i_c})\overbrace{\sum_{i_a = 1}^{n_a}\sum_{i_b = 1}^{n_b} \P_{i_c}(A_{i_a}, B_{i_b})  \log \P_{i_c}(A_{i_a}, B_{i_b})}^{\H(\mathcal{A}, \mathcal{B})\text{ относительно } \P_{i_c}} 
+		= \left[\text{\small Правило цепочки для $\H(\mathcal{A}, \mathcal{B})$ относительно $\P_{i_c}$}\right]= \\
+		= -\sum_{i_c = 1}^{n_c}\P(C_{i_c})\cdot \left[\sum_{i_a = 1}^{n_a} \P_{i_c}(A_{i_a})\log\P_{i_c}(A_{i_a}) + \sum_{i_a = 1}^{n_a}\P_{i_c}(A_{i_a})\sum_{i_b = 1}^{n_b} \P_{i_c}(B_{i_b} | A_{i_a}) \log \P(B_{i_b} | A_{i_a})\right] = \\
+		= -\sum_{i_c = 1}^{n_c}\P(C_{i_c})\sum_{i_a = 1}^{n_a} \P_{i_c}(A_{i_a})\log\P_{i_c}(A_{i_a}) - \sum_{i_c = 1}^{n_c}\sum_{i_a = 1}^{n_a}\P(C_{i_c})\P_{i_c}(A_{i_a})\sum_{i_b = 1}^{n_b} \P_{i_c}(B_{i_b} | A_{i_a}) \log \P_{i_c}(B_{i_b} | A_{i_a})
+	\end{multline*}
+	Заметим что $\P(C_{i_c})\P_{i_c}(A_{i_a}) = \P(C_{i_c})\P(A_{i_a} | C_{i_c}) = \P(A_{i_a}, C_{i_c})$  и что  $\P_{i_c}(B_{i_b} | A_{i_a}) = \P(B_{i_b} | A_{i_a}, C_{i_c})$:
+	\[
+		\P_{i_c}(B_{i_b} | A_{i_a}) = \frac{\P_{i_c}(B_{i_b} \cap A_{i_a})}{\P_{i_c}(A_{i_a})} 
+		= \frac{\P(B_{i_b} \cap A_{i_a} | C_{i_c})}{\P(A_{i_a} | C_{i_c})} 
+		= \frac{\P(B_{i_b} \cap A_{i_a} \cap C_{i_c})}{\P(A_{i_a} \cap C_{i_c})} 
+		= \P(B_{i_b} | A_{i_a}, C_{i_c})
+	\]
+	Получили что:
+	\[
+		\H(\mathcal{A}, \mathcal{B} | \mathcal{C})
+		= -\underbrace{\sum_{i_c = 1}^{n_c}\P(C_{i_c})\sum_{i_a = 1}^{n_a} \P(A_{i_a} | C_{i_c})\log\P(A_{i_a} | C_{i_c})}_{\H(\mathcal{A} | \mathcal{C})} - \underbrace{\sum_{i_c = 1}^{n_c}\sum_{i_a = 1}^{n_a}\P(A_{i_a}, C_{i_c})\sum_{i_b = 1}^{n_b} \P(B_{i_b} | A_{i_a}, C_{i_c}) \log \P(B_{i_b} | A_{i_a}, C_{i_c})}_{\H(\mathcal{B} | \mathcal{A}, \mathcal{C})}
+	\]
+	Что и требовалось доказать.
+\end{proof}
+\begin{corollary}
+	\label{cor:long-chain-rule-conditional-entropy}
+	Для любых опытов $\mathcal{A}_1, \ldots, \mathcal{A}_{r}$ и опыта $\mathcal{B}$:
+\[
+		\H_m(\mathcal{A}_1, \ldots, \mathcal{A}_r | \mathcal{B}) = \sum_{i = 1}^r \H_m(\mathcal{A}_i |  \mathcal{B}, \mathcal{A}_{i-1}, \ldots, \mathcal{A}_1)
+\]
+\end{corollary}
+\begin{proof}
+	Не умаляя общности $m = 2$. Доказательство по индукции. Базовый случай $r = 2$ следует из предложения \ref{prop:conditional-entropy-chain-rule}. Сделаем индукционный переход:
+	\begin{multline*}
+		\H(\mathcal{A}_1, \ldots, \mathcal{A}_r, \mathcal{A}_{r+1} | \mathcal{B}) 
+		\overset{*_2}{=} \H(\mathcal{A}_1, \ldots, \mathcal{A}_r | \mathcal{B}) + \H(\mathcal{A}_{r+1} | \mathcal{B}, \mathcal{A}_1, \ldots, \mathcal{A}_n) = \\
+		\overset{*_r}{=} \sum_{i = 1}^r \H_m(\mathcal{A}_i |  \mathcal{B}, \mathcal{A}_{i-1}, \ldots, \mathcal{A}_1) + \H(\mathcal{A}_{r+1} | \mathcal{B}, \mathcal{A}_1, \ldots, \mathcal{A}_r)
+		= \sum_{i = 1}^{r+1} \H_m(\mathcal{A}_i |  \mathcal{B}, \mathcal{A}_{i-1}, \ldots, \mathcal{A}_1) 
+	\end{multline*}
+	где $*$ означает переход сделанный по предположению индукции.
+\end{proof}
+
+
+\newpage
 \subsection*{Приложение. О независимых опытах, $\sigma$-алгебрах и энтропии}
 
-Доказательство теоремы выглядит довольно хитрым и возникает соблазн как-то его упростить. Можно; но для этого придется сделать язык чуть более абстрактным и доказать пару предварительных результатов.
+Доказательство теоремы \ref{th:joint-entrop-bound} выглядит довольно хитрым и возникает соблазн как-то его упростить. Можно; но для этого придется сделать язык чуть более абстрактным и доказать пару предварительных результатов.
+
 
 \begin{remark}
 	Это приложение --- скорее черновик того, как можно развивать мысль. Многие переходы намерено расписаны не очень подробно или даже туманно, дабы дать читателю некоторую творческую свободу. Можно расценивать это приложение как руководство по тому, как не стоит записывать доказательства.
